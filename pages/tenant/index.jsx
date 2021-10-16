@@ -4,9 +4,10 @@ import Banner from "../../components/Banner";
 import { LargeCard, MediumCard, SmallCard } from "../../components/Card";
 
 import bgHome from "../../assets/bgHome.png";
+import withUtils from "../../utils/withUtils";
 
 
-export default function Home({ exploreData, cardData }) {
+function Home({ exploreData, cardData }) {
   return (
     <div className="">
       <Head>
@@ -71,3 +72,5 @@ export async function getStaticProps() {
     },
   };
 }
+
+export default withUtils(Home);

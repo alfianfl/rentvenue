@@ -18,7 +18,7 @@ function search({searchResult}) {
     
 
     return (
-        <div >
+        <div className="relative">
             <div className="flex">
                 <section className="flex-grow pt-16 px-6">
                     <p className="text-xs">{range} for {noOfGuests} guests </p>
@@ -48,7 +48,7 @@ function search({searchResult}) {
                         }
                     </div>
                 </section>
-                <section className="hidden xl:inline-flex xl:min-w:[600px]">
+                <section className="hidden xl:inline-flex xl:min-w:[600px] h-screen sticky top-0">
                     <Map searchResult={searchResult}/>
                 </section>
 
