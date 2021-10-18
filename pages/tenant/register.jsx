@@ -5,6 +5,8 @@ import EmptyLayout from "../../components/Layout/EmptyLayout";
 import { useRouter } from "next/dist/client/router";
 import { registerAPI } from "../../services/AuthAPI";
 
+import Link from "next/link";
+
 const initialState = {
   email: "",
   firstName: "",
@@ -21,13 +23,13 @@ const registerReducer = (currentState, action) => {
     case "PASSWORD":
       return { ...currentState, password: action.payload };
     case "FIRST_NAME":
-      return { ...currentState, email: action.payload };
+      return { ...currentState, firstName: action.payload };
     case "LAST_NAME":
-      return { ...currentState, password: action.payload };
+      return { ...currentState, lastName: action.payload };
     case "GENDER":
-      return { ...currentState, password: action.payload };
+      return { ...currentState, gender: action.payload };
     case "PHONE_NUMBER":
-      return { ...currentState, password: action.payload };
+      return { ...currentState, phoneNumber: action.payload };
     default:
       return currentState;
   }
@@ -39,26 +41,23 @@ function register() {
 
   const router = useRouter();
 
-  const submitHandler = (e) =>{
+  const submitHandler = (e) => {
     e.preventDefault();
     setDisabled(true);
 
-    const payload = {
-    };
+    const payload = {};
 
     registerAPI(payload)
-      .then(res =>  {
-        
+      .then((res) => {
         setDisabled(false);
         router.push({
-          pathname: '/tenant/login',
+          pathname: "/tenant/login",
         });
-        
       })
-      .catch(err=>{
+      .catch((err) => {
         console.log(err);
       });
-  }
+  };
   return (
     <div className="login-rent">
       <div>
@@ -84,9 +83,15 @@ function register() {
           </h1>
           <h1 className="pt-8">
             Sudah Mendaftar ?{" "}
-            <strong className="cursor-pointer">Sign In</strong>{" "}
+            <strong className="cursor-pointer">
+              {" "}
+              <Link href="/tenant/login"> Sign In </Link>
+            </strong>{" "}
           </h1>
-          <form onSubmit={submitHandler} className="bg-transparent pt-6 w-[full] lg:w-1/3  pb-8 mb-4">
+          <form
+            onSubmit={submitHandler}
+            className="bg-transparent pt-6 w-[full] lg:w-1/3  pb-8 mb-4"
+          >
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-light mb-2"
@@ -143,21 +148,40 @@ function register() {
                 />
               </div>
             </div>
-            <div className="mb-4">
+            <div className="mb-6">
               <label
                 className="block text-gray-700 text-sm font-light mb-2"
                 htmlFor="username"
               >
                 Gender*
               </label>
-              <input
-                className="shadow appearance-none border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="phone number"
-                type="text"
-                placeholder="Phone number"
-              />
+              <div className="custom_radio flex justify-between">
+                <div>
+                  <input
+                    type="radio"
+                    id="featured-1"
+                    name="featured"
+                    onChange={(e) =>
+                      dispatch({ type: "GENDER", payload: "laki-laki" })
+                    }
+                  />
+                  <label htmlFor="featured-1">Laki-laki</label>
+                </div>
+                <br />
+                <div>
+                  <input
+                    type="radio"
+                    id="featured-2"
+                    name="featured"
+                    onChange={(e) =>
+                      dispatch({ type: "GENDER", payload: "perempuan" })
+                    }
+                  />
+                  <label htmlFor="featured-2">Perempuan</label>
+                </div>
+              </div>
             </div>
-            <div className="mb-4">
+            <div className="mb-6">
               <label
                 className="block text-gray-700 text-sm font-light mb-2"
                 htmlFor="username"
@@ -174,7 +198,7 @@ function register() {
                 }
               />
             </div>
-            <div className="mb-4">
+            <div className="mb-6">
               <label
                 className="block text-gray-700 text-sm font-light mb-2"
                 htmlFor="password"

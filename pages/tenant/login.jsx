@@ -1,17 +1,19 @@
-import React, {useReducer, useState, useEffect} from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import Banner from "../../components/Banner";
 import EmptyLayout from "../../components/Layout/EmptyLayout";
 import loginBg from "../../assets/imageLogin.png";
 import logo from "../../assets/Logo.png";
 import Image from "next/image";
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from "next/dist/client/router";
 import { loginAPI } from "../../services/AuthAPI";
 import Cookies from "js-cookie";
 
+import Link from "next/link";
+
 const initialState = {
   email: "",
-  password:""
-}
+  password: "",
+};
 
 const loginReducer = (currentState, action) => {
   switch (action.type) {
@@ -31,38 +33,40 @@ function login() {
 
   const router = useRouter();
 
-  const submitHandler = (e) =>{
+  const submitHandler = (e) => {
     e.preventDefault();
     setDisabled(true);
-    
+
     const payload = {
       email: loginData.email,
-      password:loginData.password
+      password: loginData.password,
     };
 
     loginAPI(payload)
-      .then(res =>  {
+      .then((res) => {
         setToken(res.token);
         router.push({
-          pathname: '/tenant',
+          pathname: "/tenant",
         });
-    
+
         setDisabled(false);
-        
       })
-      .catch(err=>{
+      .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     Cookies.set("token", token, { path: "" });
-  },[token]);
+  }, [token]);
 
   return (
     <div className="login-rent">
       <Banner image={loginBg}>
-        <div className="container absolute px-5 sm:px-10 lg:px-20" style={{top:'100px'}}>
+        <div
+          className="container absolute px-5 sm:px-10 lg:px-20"
+          style={{ top: "100px" }}
+        >
           <div className="relative flex items-center my-auto h-20 cursor-pointer mb-10">
             <Image
               src={logo}
@@ -155,7 +159,10 @@ function login() {
           </form>
           <h1>
             Belum punya akun?{" "}
-            <strong className="cursor-pointer">Sign Up</strong>{" "}
+            <strong className="cursor-pointer">
+              {" "}
+              <Link href="/tenant/register">Sign Up</Link>
+            </strong>{" "}
           </h1>
         </div>
       </Banner>
