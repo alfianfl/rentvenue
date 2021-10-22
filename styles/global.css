@@ -55,3 +55,74 @@
     transition: all .3s ease;
     box-shadow: inset 0 0 0 0.2em white, inset 0 0 0 1em #049ADA;
   }
+
+
+  /* profile */
+  .tenant-profile, .tenant-personal-information{
+    margin-top: 100px;
+    margin-bottom: 250px;
+  }
+  .container-change-password, .container-change-profile{
+    background-color: #F0F0F0;
+    border-radius: 50px;
+  }
+  .button-update-password, .button-update-profile{
+    background-color: #049ADA;
+  }
+  .button-update-password:hover{
+    background-color: #0579aa;
+  }
+  .button-update-profile:hover{
+    background-color: #0579aa;
+  }
+
+  .sidebar-profile ul li{
+    color: #878787 ;
+    width: max-content;
+  }
+  .inactive, .active{
+    height: 20px;
+    display: block;
+  }
+  .sidebar-profile ul .inactive:hover{
+    font-weight: 600;
+    color: #333333; 
+  }
+
+  .sidebar-profile .active{
+    font-weight: 600;
+    color: #333333; 
+  }
+
+  .sidebar-profile .active:after{
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 5px;
+    left: 50%;
+    background-color: #207ED6;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    width: 100%;
+  }
+
+  .sidebar-profile .inactive:after {    
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 5px;
+    left: 50%;
+    background-color: #207ED6;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    width: 0;
+  }
+  .sidebar-profile .inactive:hover:after { 
+    width: 100%; 
+    left: 0; 
+  }
+
+  /* nav vendor */
+  .nav-vendor:hover{
+    background: #434450;
+  }
