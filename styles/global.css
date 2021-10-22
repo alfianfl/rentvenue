@@ -121,3 +121,8 @@
     width: 100%; 
     left: 0; 
   }
+
+  /* nav vendor */
+  .nav-vendor:hover{
+    background: #434450;
+  }
