@@ -29,7 +29,12 @@ const loginReducer = (currentState, action) => {
 function login() {
   const [loginData, dispatch] = useReducer(loginReducer, initialState);
   const [disabled, setDisabled] = useState(false);
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(() => {
+    const cookie = Cookies.get("token");
+    return cookie ? cookie : false;
+  });
+
+  const [alert, setAlert] = useState(false);
 
   const router = useRouter();
 
@@ -44,11 +49,22 @@ function login() {
 
     loginAPI(payload)
       .then((res) => {
-        setToken(res.token);
-        router.push({
-          pathname: "/tenant",
-        });
-
+        if( res.data.errors !== undefined){
+          setAlert(
+             res.data.errors.message
+          )
+        } else{
+          if(res.data.message === "Email and password didn't match"){
+            setAlert(
+               res.data.message
+            )
+          } else{
+            setToken("res.token");
+            router.push({
+              pathname: "/tenant",
+            });
+          }
+        }
         setDisabled(false);
       })
       .catch((err) => {
@@ -57,7 +73,11 @@ function login() {
   };
 
   useEffect(() => {
-    Cookies.set("token", token, { path: "" });
+    if (token === false) {
+      Cookies.remove("token", { path: "" });
+    } else {
+      Cookies.set("token", token, { path: "" });
+    }
   }, [token]);
 
   return (
@@ -79,13 +99,15 @@ function login() {
             Selamat Datang! <br /> Silahkan login untuk mengakses website
             RENTVENUE
           </h1>
-          {/* <div
+          {
+            alert ? 
+          <div
             className="bg-red-400 border border-red-400 w-[100%] lg:w-[50%]  text-white px-4 py-3 rounded relative"
             role="alert"
           >
             <strong className="font-bold">failed to login! </strong>
             <span className="block sm:inline">
-              password and email is doesn't match
+              {alert}
             </span>
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
               <svg
@@ -98,7 +120,8 @@ function login() {
                 <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
               </svg>
             </span>
-          </div> */}
+          </div> : null
+          }
 
           <form className="bg-transparent pt-6 w-[full] lg:w-1/3  pb-8 mb-4">
             <div className="mb-4">
@@ -126,7 +149,7 @@ function login() {
                 Password*
               </label>
               <input
-                className="shadow appearance-none border border-red-200 rounded-2xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded-2xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 id="password"
                 type="password"
                 placeholder="******************"
@@ -135,10 +158,6 @@ function login() {
                 }
               />
 
-              {/* if no choose password */}
-              <p className="text-red-500 text-xs italic">
-                Please choose a password.
-              </p>
             </div>
             <div className="flex items-center justify-between">
               <button
