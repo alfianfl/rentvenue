@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import VendorLayout from "../../../components/Layout/VendorLayout";
 import {
   FolderOpenIcon,
@@ -6,8 +6,47 @@ import {
   SaveIcon,
 } from "@heroicons/react/solid";
 
+import "mapbox-gl/dist/mapbox-gl.css";
+import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import MapGL from "react-map-gl";
+import Geocoder from "react-map-gl-geocoder";
+
+// Please be a decent human and don't abuse my Mapbox API token.
+// If you fork this sandbox, replace my API token with your own.
+// Ways to set Mapbox token: https://uber.github.io/react-map-gl/#/Documentation/getting-started/about-mapbox-tokens
+const MAPBOX_TOKEN =
+  "pk.eyJ1IjoiYWxmaWFuZmwiLCJhIjoiY2t0amQwb3oyMWFuZzJwcnRzZG90eWZkbCJ9.zn3csz72YfegBayAqOuWDA";
 function addVenue() {
   const [file, setFile] = useState({ raw1: "", raw: "" });
+  const [image, setImage] = useState([]);
+
+  const [viewport, setViewport] = useState({
+    latitude: 37.7577,
+    longitude: -122.4376,
+    zoom: 8
+  });
+  const [geoLocation, setGeoLocation] = useState({
+    lat:"",
+    long:""
+  })
+  const mapRef = useRef();
+  const handleViewportChange = useCallback(
+    (newViewport) => setViewport(newViewport),
+    []
+  );
+
+  // if you are happy with Geocoder default settings, you can just use handleViewportChange directly
+  const handleGeocoderViewportChange = useCallback(
+    (newViewport) => {
+      const geocoderDefaultOverrides = { transitionDuration: 1000 };
+      setGeoLocation({...geoLocation, lat: newViewport.latitude, long: newViewport.longitude});
+      return handleViewportChange({
+        ...newViewport,
+        ...geocoderDefaultOverrides
+      });
+    },
+    [handleViewportChange]
+  );
 
   const handleChange = (e) => {
     if (e.target.files.length) {
@@ -18,9 +57,39 @@ function addVenue() {
       }
     }
   };
+
+  const handleChangeImage = (e) => {
+    if (e.target.files.length < 6 && image.length < 5) {
+      const filesArray = Array.from(e.target.files).map((file) =>
+        URL.createObjectURL(file)
+      );
+
+      setImage((prevImages) => prevImages.concat(filesArray));
+      Array.from(e.target.files).map(
+        (file) => URL.revokeObjectURL(file) // avoid memory leak
+      );
+    } else {
+      alert("File maksimal 5");
+    }
+  };
+
+  // render photoimage
+  const renderPhotos = (source) => {
+    return source.map((photo) => {
+      return (
+        <img
+          src={photo}
+          alt="image"
+          className="h-full w-full mb-20 cursor-pointer"
+          key={photo}
+        />
+      );
+    });
+  };
+
   return (
     <div className="add-venue-vendor">
-      <form className="bg-transparent pt-6 w-[full]   pb-8 mb-4">
+      <form className="bg-transparent pt-6 w-[full]  pb-8 mb-4">
         <div className="mb-8 w-[full] lg:w-1/3">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -47,6 +116,9 @@ function addVenue() {
             type="textarea"
           />
         </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          {renderPhotos(image)}
+        </div>
         <div className="button-image-profile w-1/3 mb-8">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -69,7 +141,14 @@ function addVenue() {
               style={{ fontSize: "16px" }}
             ></span>
           </label>
-          <input type="file" name="ktp" id="upload-button1" hidden />
+          <input
+            type="file"
+            name="ktp"
+            id="upload-button1"
+            hidden
+            multiple
+            onChange={handleChangeImage}
+          />
         </div>
         <div className="mb-8 w-[full] lg:w-1/3">
           <label
@@ -84,16 +163,42 @@ function addVenue() {
             type="text"
           />
         </div>
-        <div className="mb-8 w-[full] lg:w-1/3">
+        <div className="mb-8 w-[full] lg:w-full">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="username"
           >
-            Alamat Lengkap
+            Alamat 
+          </label>
+          <div style={{ height: "500px", width: "100%" }}>
+            <MapGL
+              ref={mapRef}
+              {...viewport}
+              width="100%"
+              height="100%"
+              onViewportChange={handleViewportChange}
+              mapStyle="mapbox://styles/alfianfl/cktjd6j0o261c18qfjwjrknzz"
+              mapboxApiAccessToken={MAPBOX_TOKEN}
+            >
+              <Geocoder
+                mapRef={mapRef}
+                onViewportChange={handleGeocoderViewportChange}
+                mapboxApiAccessToken={MAPBOX_TOKEN}
+                position="top-left"
+              />
+            </MapGL>
+          </div>
+        </div>
+        <div className="mb-8 w-[full] lg:w-1/2">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="username"
+          >
+            Patokan Alamat (Nama jalan)
           </label>
           <input
             className="shadow text-sm appearance-none border border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="alamat"
+            id="kota"
             type="text"
           />
         </div>
@@ -182,6 +287,7 @@ function addVenue() {
             onChange={handleChange}
             name="ktp"
             id="upload-button2"
+            multiple
             hidden
           />
         </div>
