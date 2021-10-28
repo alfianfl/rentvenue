@@ -5,7 +5,7 @@ import loginBg from "../../assets/imageLogin.png";
 import logo from "../../assets/Logo.png";
 import Image from "next/image";
 import { useRouter } from "next/dist/client/router";
-import { loginAPI } from "../../services/AuthAPI";
+import { loginVendorAPI } from "../../services/AuthAPI";
 import Cookies from "js-cookie";
 
 import Link from "next/link";
@@ -30,6 +30,10 @@ function login() {
   const [loginData, dispatch] = useReducer(loginReducer, initialState);
   const [disabled, setDisabled] = useState(false);
   const [token, setToken] = useState("");
+  const [alert, setAlert] = useState({
+    emailNotVerified: false,
+    passwordDoesntMatch:false
+  });
 
   const router = useRouter();
 
@@ -42,22 +46,35 @@ function login() {
       password: loginData.password,
     };
 
-    loginAPI(payload)
+    loginVendorAPI(payload)
       .then((res) => {
-        setToken(res.token);
-        router.push({
-          pathname: "/tenant",
-        });
-
+        console.log(res.data);
+        if(res.data.message === "Please activate your email first"){
+          setAlert({emailNotVerified: res.data.message});
+        }else{
+          if(res.data.message === "Email and password didn't match"){
+            setAlert({passwordDoesntMatch:res.data.message})
+          }else{
+            setToken(res.data.data.token);
+            router.push({
+              pathname: "/vendor/venue",
+            });
+          }
+        }
         setDisabled(false);
       })
       .catch((err) => {
         console.log(err);
+        setDisabled(false);
       });
   };
 
   useEffect(() => {
-    Cookies.set("token", token, { path: "" });
+    if (token === undefined) {
+      Cookies.remove("jwt", { path: "" });
+    } else {
+      Cookies.set("jwt", token, { path: "" });
+    }
   }, [token]);
 
   return (
@@ -79,26 +96,50 @@ function login() {
           Selamat Datang! <br />
 Silahkan login untuk masuk website RentVenue sebagai Vendor 
           </h1>
-          {/* <div
-            className="bg-red-400 border border-red-400 w-[100%] lg:w-[50%]  text-white px-4 py-3 rounded relative"
-            role="alert"
-          >
-            <strong className="font-bold">failed to login! </strong>
-            <span className="block sm:inline">
-              password and email is doesn't match
-            </span>
-            <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
-              <svg
-                className="fill-current h-6 w-6 text-white"
-                role="button"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <title>Close</title>
-                <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
-              </svg>
-            </span>
-          </div> */}
+          {alert.passwordDoesntMatch ? (
+            <div
+              className="bg-red-400 border border-red-400 w-[100%] lg:w-[50%]  text-white px-4 py-3 rounded relative"
+              role="alert"
+            >
+              <strong className="font-bold">failed to register! </strong>
+              <span className="block sm:inline">
+                {alert.passwordDoesntMatch}
+              </span>
+              <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                <svg
+                  className="fill-current h-6 w-6 text-white"
+                  role="button"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <title>Close</title>
+                  <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                </svg>
+              </span>
+            </div>
+          ) : null}
+          {alert.emailNotVerified ? (
+            <div
+              className="bg-red-400 border border-red-400 w-[100%] lg:w-[50%]  text-white px-4 py-3 rounded relative"
+              role="alert"
+            >
+              <strong className="font-bold">failed to register! </strong>
+              <span className="block sm:inline">
+                {alert.emailNotVerified}
+              </span>
+              <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                <svg
+                  className="fill-current h-6 w-6 text-white"
+                  role="button"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <title>Close</title>
+                  <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                </svg>
+              </span>
+            </div>
+          ) : null}
 
           <form className="bg-transparent pt-6 w-[full] lg:w-1/3  pb-8 mb-4">
             <div className="mb-4">
@@ -134,11 +175,6 @@ Silahkan login untuk masuk website RentVenue sebagai Vendor
                   dispatch({ type: "PASSWORD", payload: e.target.value })
                 }
               />
-
-              {/* if no choose password */}
-              <p className="text-red-500 text-xs italic">
-                Please choose a password.
-              </p>
             </div>
             <div className="flex items-center justify-between">
               <button

@@ -1,43 +1,76 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useReducer } from "react";
 import VendorLayout from "../../../components/Layout/VendorLayout";
 import {
   FolderOpenIcon,
   PhotographIcon,
   SaveIcon,
 } from "@heroicons/react/solid";
-
 import "mapbox-gl/dist/mapbox-gl.css";
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import MapGL from "react-map-gl";
 import Geocoder from "react-map-gl-geocoder";
 
-// Please be a decent human and don't abuse my Mapbox API token.
-// If you fork this sandbox, replace my API token with your own.
-// Ways to set Mapbox token: https://uber.github.io/react-map-gl/#/Documentation/getting-started/about-mapbox-tokens
+import {useRouter} from "next/router";
+
+import { addVenueAPI } from "../../../services/VenueApi";
+
+const initialState = {
+  namaGedung: "",
+  deskripsi: "",
+  kota: "",
+  alamat: "",
+  kapasitas: "",
+  hargaSewa: "",
+};
+
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYWxmaWFuZmwiLCJhIjoiY2t0amQwb3oyMWFuZzJwcnRzZG90eWZkbCJ9.zn3csz72YfegBayAqOuWDA";
+
+const addVenueReducer = (currentState, action) => {
+  switch (action.type) {
+    case "NAMA_GEDUNG":
+      return { ...currentState, namaGedung: action.payload };
+    case "DESKRIPSI":
+      return { ...currentState, deskripsi: action.payload };
+    case "KOTA":
+      return { ...currentState, kota: action.payload };
+    case "ALAMAT":
+      return { ...currentState, alamat: action.payload };
+    case "KAPASITAS":
+      return { ...currentState, kapasitas: action.payload };
+    case "HARGA_SEWA":
+      return { ...currentState, phoneNumber: action.payload };
+    default:
+      return currentState;
+  }
+}; 
+
 function addVenue() {
   const [file, setFile] = useState({ raw1: "", raw: "" });
   const [image, setImage] = useState([]);
+  const [venueData, dispatch] = useReducer(addVenueReducer, initialState);
 
+  const [geoLocation, setGeoLocation] = useState({
+    lat:"",
+    long:""
+  })
   const [viewport, setViewport] = useState({
     latitude: 37.7577,
     longitude: -122.4376,
     zoom: 8
   });
-  const [geoLocation, setGeoLocation] = useState({
-    lat:"",
-    long:""
-  })
   const mapRef = useRef();
   const handleViewportChange = useCallback(
     (newViewport) => setViewport(newViewport),
     []
   );
 
+  const router = useRouter();
+
   // if you are happy with Geocoder default settings, you can just use handleViewportChange directly
   const handleGeocoderViewportChange = useCallback(
     (newViewport) => {
+      console.log(newViewport);
       const geocoderDefaultOverrides = { transitionDuration: 1000 };
       setGeoLocation({...geoLocation, lat: newViewport.latitude, long: newViewport.longitude});
       return handleViewportChange({
@@ -53,7 +86,7 @@ function addVenue() {
       if (e.target.name === "ktp") {
         setFile({ ...file, raw1: e.target.files[0].name });
       } else {
-        setFile({ ...file, raw2: e.target.files[0].name });
+        setFile({ ...file, raw: e.target.files[0].name });
       }
     }
   };
@@ -87,6 +120,57 @@ function addVenue() {
     });
   };
 
+  const handleSubmitVenue = () => {
+    const data = new FormData();
+    data.append("name", venueData.namaGedung);
+    data.append("description", venueData.deskripsi);
+    data.append("city", venueData.kota);
+    data.append("address", venueData.alamat);
+    data.append("capacity", venueData.kapasitas);
+    data.append("price", venueData.hargaSewa);
+    data.append("latitude", geoLocation.lat);
+    data.append("longitude", geoLocation.long);
+    image.forEach((img) => {
+      data.append("venue_photos", img);
+    });
+    data.append("ktp", file.raw1);
+    data.append("surat_tanah", file.raw);
+
+    // const payload = {
+    //   name: venueData.namaGedung,
+    //   description: venueData.deskripsi,
+    //   city: venueData.kota,
+    //   address: venueData.alamat,
+    //   capacity: venueData.kapasitas,
+    //   price: venueData.hargaSewa,
+    //   latitude: geoLocation.lat,
+    //   longitude: geoLocation.long,
+    //   venue_photos: image,
+    //   ktp: file.raw1,
+    //  surat_tanah: file.raw
+    // }
+
+    // console.log("name : " + venueData.namaGedung);
+    // console.log("description : "+ venueData.deskripsi);
+    // console.log("city : "+ venueData.kota);
+    // console.log("address : "+ venueData.alamat);
+    // console.log("capacity : "+ venueData.kapasitas);
+    // console.log("latitude : "+ geoLocation.lat);
+    // console.log("longitude : "+ geoLocation.long);
+    // console.log("venue_photos : "+ image);
+    // console.log("ktp : " + file.raw1);
+    // console.log("surat_tanah  : " + file.raw);
+    
+
+    addVenueAPI(data)
+      .then(res=>{
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   return (
     <div className="add-venue-vendor">
       <form className="bg-transparent pt-6 w-[full]  pb-8 mb-4">
@@ -101,6 +185,9 @@ function addVenue() {
             className="shadow text-sm appearance-none border border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="nama gedung"
             type="text"
+            onChange={(e) =>
+              dispatch({ type: "NAMA_GEDUNG", payload: e.target.value })
+            }
           />
         </div>
         <div className="mb-8 w-[full] lg:w-1/2">
@@ -114,6 +201,9 @@ function addVenue() {
             className="shadow text-sm appearance-none border border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="deskripsi"
             type="textarea"
+            onChange={(e) =>
+              dispatch({ type: "DESKRIPSI", payload: e.target.value })
+            }
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -161,6 +251,9 @@ function addVenue() {
             className="shadow text-sm appearance-none border border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="kota"
             type="text"
+            onChange={(e) =>
+              dispatch({ type: "KOTA", payload: e.target.value })
+            }
           />
         </div>
         <div className="mb-8 w-[full] lg:w-full">
@@ -200,6 +293,9 @@ function addVenue() {
             className="shadow text-sm appearance-none border border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="kota"
             type="text"
+            onChange={(e) =>
+              dispatch({ type: "ALAMAT", payload: e.target.value })
+            }
           />
         </div>
         <div className="flex flex-wrap -mx-3 mb-8">
@@ -215,6 +311,9 @@ function addVenue() {
               id="grid-first-name"
               type="number"
               placeholder="0"
+              onChange={(e) =>
+                dispatch({ type: "KAPASITAS", payload: e.target.value })
+              }
             />
           </div>
           <div className="w-full md:w-1/2 px-3">
@@ -229,6 +328,9 @@ function addVenue() {
               id="grid-last-name"
               type="number"
               placeholder="Rp"
+              onChange={(e) =>
+                dispatch({ type: "HARGA_SEWA", payload: e.target.value })
+              }
             />
           </div>
         </div>
@@ -250,7 +352,7 @@ function addVenue() {
               </div>
             </div>
             <span className="font-light ml-3" style={{ fontSize: "16px" }}>
-              {file.raw2}
+              {file.raw}
             </span>
           </label>
           <input
@@ -296,6 +398,7 @@ function addVenue() {
             className="bg-blue-500 font-xs hover:bg-blue-700 text-white rounded-2xl  py-2 px-3 justify-around flex focus:outline-none focus:shadow-outline"
             type="button"
             style={{ fontSize: "16px" }}
+            onClick={handleSubmitVenue}
           >
             <SaveIcon className="h-7 bg-blue-800 text-white rounded-full p-1 cursor-pointer mr-3" />{" "}
             Simpan

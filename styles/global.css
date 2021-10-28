@@ -126,3 +126,8 @@
   .nav-vendor:hover{
     background: #434450;
   }
+
+  /* datepicker */
+  .rdrDefinedRangesWrapper{
+    display: none;
+  }

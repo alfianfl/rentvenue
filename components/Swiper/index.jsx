@@ -1,0 +1,1 @@
+export  {default as SwiperBooking} from "./SwiperBooking"

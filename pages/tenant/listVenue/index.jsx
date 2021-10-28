@@ -1,82 +1,49 @@
-import Head from "next/head";
 import React from "react";
-
-import Banner from "../../components/Banner";
-import { LargeCard, MediumCard, SmallCard } from "../../components/Card";
-
 import Link from "next/link";
 
-import bgHome from "../../assets/bgHome.png";
-import withUtils from "../../utils/withUtils";
-
-const initialFilter = ["Jakarta", "Bandung", "Surabaya", "Bogor"];
-const item = [{}, {}, {}, {}, {}]; 
-
-function Home({ exploreData, cardData }) {
+const initialFilter = ["Semua kategori", "Termahal", "Termurah", "Terdekat"];
+const item = [{}, {}, {}, {}, {}];
+function index() {
   const [openTab, setOpenTab] = React.useState(1);
+  const color = "blue";
   return (
-    <div className="">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <Banner image={bgHome}>
-      </Banner>
-
-      <main className="max-w-7xl mx-auto px-8 sm:px-1">
-        <section className="pt-6 mt-20">
-          <h2 className="text-4xl font-semibold pb-5">Explore Nearby</h2>
-
-          {/* Pull some data from server */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {exploreData.map((item, index) => (
-              <SmallCard
-                key={index}
-                img={item.img}
-                distance={item.distance}
-                location={item.location}
-              />
-            ))}
-          </div>
-        </section>
-        <section className=" pt-10 pb-20 mt-20">
-        <h2 className="text-4xl font-semibold pb-5">Rekomendasi Lainnya</h2>
-          <div className="w-1/8 flex flex-wrap justify-center">
-            <ul
-              className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
-              role="tablist"
-            >
-              {initialFilter.map((filter) => (
-                <li
-                  key={filter}
-                  className="mb-2 mr-2 last:mr-0 flex-auto text-center "
+    <>
+      <div className="flex flex-wrap px-10 lg:px-20 pt-10 pb-20">
+        <div className="w-1/8">
+          <ul
+            className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
+            role="tablist"
+          >
+            {initialFilter.map((filter) => (
+              <li
+                key={filter}
+                className="mb-2 mr-2 last:mr-0 flex-auto text-center "
+              >
+                <a
+                  className={
+                    "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block hover:bg-blue-800 cursor-pointer leading-normal " +
+                    (openTab === 1
+                      ? "text-white bg-" + color + "-600"
+                      : "text-" + color + "-600 bg-white")
+                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setOpenTab(1);
+                  }}
+                  data-toggle="tab"
+                  href="#link1"
+                  role="tablist"
                 >
-                  <a
-                    className={
-                      "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block hover:bg-blue-800 cursor-pointer leading-normal " +
-                      (openTab === 1
-                        ? "text-white bg-purple-700"
-                        : "text-white-600 bg-white")
-                    }
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setOpenTab(1);
-                    }}
-                    data-toggle="tab"
-                    href="#link1"
-                    role="tablist"
-                  >
-                    <i className="fas fa-space-shuttle text-base mr-1"></i>{" "}
-                    {filter}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="relative flex flex-col min-w-0 break-words bg-white justify-center w-full mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
+                  <i className="fas fa-space-shuttle text-base mr-1"></i>{" "}
+                  {filter}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
           {item.map((x) => (
-            <div className="relative max-w-sm w-[300px] bg-white shadow-2xl mx-auto rounded-3xl p-8 lg:mx-1 my-3 cursor-pointer ">
+            <div className="relative max-w-sm w-[300px] bg-white shadow-2xl rounded-3xl p-8 mx-1 my-3 cursor-pointer ">
               <div className="overflow-x-hidden rounded-2xl relative">
                 <img
                   className="h-40 rounded-2xl w-full object-cover"
@@ -102,45 +69,9 @@ function Home({ exploreData, cardData }) {
             </div>
           ))}
         </div>
-          
-        </section>
-        <section>
-          <h2 className="text-4xl font-semibold py-8">Live Anywhere</h2>
-
-          <div className="flex space-x-3 overflow-scroll scrollbar-hide">
-            {cardData.map((item, index) => (
-              <MediumCard key={index} img={item.img} title={item.title} />
-            ))}
-          </div>
-        </section>
-
-        <section>
-          <LargeCard
-            img="https://links.papareact.com/4cj"
-            title="The Greatest Outdoors"
-            description="Wishlists created by Airbnb"
-            buttonText="Get Inspired"
-          />
-        </section>
-      </main>
-    </div>
+      </div>
+    </>
   );
 }
 
-export async function getStaticProps() {
-  const exploreData = await fetch("https://links.papareact.com/pyp").then(
-    (res) => res.json()
-  );
-
-  const cardData = await fetch("https://links.papareact.com/zp1").then((res) =>
-    res.json()
-  );
-  return {
-    props: {
-      exploreData,
-      cardData,
-    },
-  };
-}
-
-export default Home;
+export default index;

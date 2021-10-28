@@ -7,3 +7,11 @@ export const registerAPI = (payload) => {
 export const loginAPI = (payload) => {
   return API.post("/user/login", payload);
 };
+
+export const registerVendorAPI = (payload) => {
+  return API.post("/vendor/register", payload);
+};
+
+export const loginVendorAPI = (payload) => {
+  return API.post("/vendor/login", payload);
+};

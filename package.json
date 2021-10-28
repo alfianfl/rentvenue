@@ -21,6 +21,7 @@
     "react-map-gl": "^6.1.17",
     "react-map-gl-geocoder": "^2.2.0",
     "sweetalert": "^2.1.2",
+    "swiper": "^7.0.9",
     "tailwind-scrollbar-hide": "^1.0.3"
   },
   "devDependencies": {
