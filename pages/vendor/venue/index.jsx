@@ -1,12 +1,27 @@
-import React from "react";
+import React, {useEffect} from "react";
 import VendorLayout from "../../../components/Layout/VendorLayout";
 import {
 DocumentAddIcon
   } from "@heroicons/react/solid";
 import { VendorVenue } from "../../../components/Card";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+
+import {fetchVenue} from "../../../redux";
+import Cookies from "js-cookie";
 
 function index() {
+  const venueData = useSelector(state=>state.venue);
+  const dispatch = useDispatch();
+
+  const vendorId = Cookies.get("vendorId");
+
+  useEffect(() => {
+    dispatch(fetchVenue(vendorId));
+  }, [dispatch]);
+
+
+  
   return (
     <div className="vendor-venue">
       <div className="title">

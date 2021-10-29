@@ -21,6 +21,8 @@ const initialState = {
   alamat: "",
   kapasitas: "",
   hargaSewa: "",
+  ktp:null,
+  suratTanah:null
 };
 
 const MAPBOX_TOKEN =
@@ -38,8 +40,12 @@ const addVenueReducer = (currentState, action) => {
       return { ...currentState, alamat: action.payload };
     case "KAPASITAS":
       return { ...currentState, kapasitas: action.payload };
+    case "KTP":
+      return { ...currentState, ktp: action.payload };
+    case "SURAT_TANAH":
+      return { ...currentState, suratTanah: action.payload };
     case "HARGA_SEWA":
-      return { ...currentState, phoneNumber: action.payload };
+      return { ...currentState, hargaSewa: action.payload };
     default:
       return currentState;
   }
@@ -48,6 +54,7 @@ const addVenueReducer = (currentState, action) => {
 function addVenue() {
   const [file, setFile] = useState({ raw1: "", raw: "" });
   const [image, setImage] = useState([]);
+  const [imageFile, setImageFile] = useState([]);
   const [venueData, dispatch] = useReducer(addVenueReducer, initialState);
 
   const [geoLocation, setGeoLocation] = useState({
@@ -84,14 +91,17 @@ function addVenue() {
   const handleChange = (e) => {
     if (e.target.files.length) {
       if (e.target.name === "ktp") {
+        dispatch({ type: "KTP", payload: e.target.files[0] })
         setFile({ ...file, raw1: e.target.files[0].name });
       } else {
+        dispatch({ type: "SURAT_TANAH", payload: e.target.files[0] })
         setFile({ ...file, raw: e.target.files[0].name });
       }
     }
   };
 
   const handleChangeImage = (e) => {
+    setImageFile([ ...imageFile, ...e.target.files]);
     if (e.target.files.length < 6 && image.length < 5) {
       const filesArray = Array.from(e.target.files).map((file) =>
         URL.createObjectURL(file)
@@ -130,25 +140,12 @@ function addVenue() {
     data.append("price", venueData.hargaSewa);
     data.append("latitude", geoLocation.lat);
     data.append("longitude", geoLocation.long);
-    image.forEach((img) => {
-      data.append("venue_photos", img);
-    });
-    data.append("ktp", file.raw1);
-    data.append("surat_tanah", file.raw);
-
-    // const payload = {
-    //   name: venueData.namaGedung,
-    //   description: venueData.deskripsi,
-    //   city: venueData.kota,
-    //   address: venueData.alamat,
-    //   capacity: venueData.kapasitas,
-    //   price: venueData.hargaSewa,
-    //   latitude: geoLocation.lat,
-    //   longitude: geoLocation.long,
-    //   venue_photos: image,
-    //   ktp: file.raw1,
-    //  surat_tanah: file.raw
-    // }
+    
+    for (const key of Object.keys(imageFile)) {
+      data.append('venue_photos', imageFile[key])
+    }
+    data.append("ktp", venueData.ktp);
+    data.append("surat_tanah", venueData.suratTanah);
 
     // console.log("name : " + venueData.namaGedung);
     // console.log("description : "+ venueData.deskripsi);
@@ -157,14 +154,19 @@ function addVenue() {
     // console.log("capacity : "+ venueData.kapasitas);
     // console.log("latitude : "+ geoLocation.lat);
     // console.log("longitude : "+ geoLocation.long);
-    // console.log("venue_photos : "+ image);
-    // console.log("ktp : " + file.raw1);
-    // console.log("surat_tanah  : " + file.raw);
+    // console.log("venue_photos : "+ imageFile);
+    // console.log("ktp : " + venueData.ktp);
+    // console.log("surat_tanah  : " + venueData.suratTanah);
     
 
     addVenueAPI(data)
       .then(res=>{
-        console.log(res);
+        if(res.statusText === "Created"){
+          router.push({
+            pathname:'/vendor/venue'
+          })
+        }
+        console.log(res.statusText);
       })
       .catch(err => {
         console.log(err);
@@ -185,6 +187,7 @@ function addVenue() {
             className="shadow text-sm appearance-none border border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="nama gedung"
             type="text"
+            value={venueData.namaGedung}
             onChange={(e) =>
               dispatch({ type: "NAMA_GEDUNG", payload: e.target.value })
             }
@@ -201,6 +204,7 @@ function addVenue() {
             className="shadow text-sm appearance-none border border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="deskripsi"
             type="textarea"
+            value={venueData.deskripsi}
             onChange={(e) =>
               dispatch({ type: "DESKRIPSI", payload: e.target.value })
             }
@@ -237,6 +241,7 @@ function addVenue() {
             id="upload-button1"
             hidden
             multiple
+            value={venueData.image}
             onChange={handleChangeImage}
           />
         </div>
@@ -251,6 +256,7 @@ function addVenue() {
             className="shadow text-sm appearance-none border border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="kota"
             type="text"
+            value={venueData.kota}
             onChange={(e) =>
               dispatch({ type: "KOTA", payload: e.target.value })
             }
@@ -293,6 +299,7 @@ function addVenue() {
             className="shadow text-sm appearance-none border border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="kota"
             type="text"
+            value={venueData.alamat}
             onChange={(e) =>
               dispatch({ type: "ALAMAT", payload: e.target.value })
             }
@@ -311,6 +318,7 @@ function addVenue() {
               id="grid-first-name"
               type="number"
               placeholder="0"
+              value={venueData.kapasitas}
               onChange={(e) =>
                 dispatch({ type: "KAPASITAS", payload: e.target.value })
               }
@@ -328,6 +336,7 @@ function addVenue() {
               id="grid-last-name"
               type="number"
               placeholder="Rp"
+              value={venueData.hargaSewa}
               onChange={(e) =>
                 dispatch({ type: "HARGA_SEWA", payload: e.target.value })
               }

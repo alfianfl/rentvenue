@@ -1,0 +1,18 @@
+[
+    {
+        "nama" : "Gedubg dewa",
+        "klien" :"alfian",
+        "tanggalCheckIn":"29-10-2020",
+        "tanggalCheckOut":"29-10-2020",
+        "status": "pending",
+        "keterangan":"menunggu"
+    },
+    {
+        "nama" : "Gedubg dewa",
+        "klien" :"alfian",
+        "tanggalCheckIn":"29-10-2020",
+        "tanggalCheckOut":"29-10-2020",
+        "status": "pending",
+        "keterangan":"menunggu"
+    }
+]

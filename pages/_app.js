@@ -6,6 +6,9 @@ import Tenant from '../components/Layout/Tenant';
 import ProgressBar from "@badrap/bar-of-progress";
 import Router from 'next/router';
 
+import { Provider } from "react-redux";
+import store from "../redux/store";
+
 
 const progress = new ProgressBar({
   size:4,
@@ -23,9 +26,11 @@ function MyApp({ Component, pageProps }) {
   const Layout = Component.Layout || Tenant ;
   return (
     <div className="app">
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <Provider store={store}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </Provider>
     </div>
   )
 }

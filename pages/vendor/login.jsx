@@ -29,10 +29,13 @@ const loginReducer = (currentState, action) => {
 function login() {
   const [loginData, dispatch] = useReducer(loginReducer, initialState);
   const [disabled, setDisabled] = useState(false);
-  const [token, setToken] = useState("");
   const [alert, setAlert] = useState({
     emailNotVerified: false,
     passwordDoesntMatch:false
+  });
+  const [token, setToken] = useState(() => {
+    const cookie = Cookies.get("vendorId");
+    return cookie ? cookie : false;
   });
 
   const router = useRouter();
@@ -48,14 +51,13 @@ function login() {
 
     loginVendorAPI(payload)
       .then((res) => {
-        console.log(res.data);
         if(res.data.message === "Please activate your email first"){
           setAlert({emailNotVerified: res.data.message});
         }else{
           if(res.data.message === "Email and password didn't match"){
             setAlert({passwordDoesntMatch:res.data.message})
           }else{
-            setToken(res.data.data.token);
+            setToken(res.data.data.VendorId);
             router.push({
               pathname: "/vendor/venue",
             });
@@ -68,12 +70,11 @@ function login() {
         setDisabled(false);
       });
   };
-
   useEffect(() => {
-    if (token === undefined) {
-      Cookies.remove("jwt", { path: "" });
+    if (token === false) {
+      Cookies.remove("vendorId", { path: "" });
     } else {
-      Cookies.set("jwt", token, { path: "" });
+      Cookies.set("vendorId", token, { path: "" });
     }
   }, [token]);
 
