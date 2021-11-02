@@ -66,7 +66,6 @@ export async function getServerSideProps(){
             searchResult
         }
     }
-    
 
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import VendorLayout from "../../../components/Layout/VendorLayout";
+import VendorLayout from "../../../../components/Layout/VendorLayout";
 import Link from "next/link";
 import { PhotographIcon, PencilAltIcon } from "@heroicons/react/solid";
 

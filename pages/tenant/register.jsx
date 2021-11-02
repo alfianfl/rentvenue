@@ -24,8 +24,8 @@ const registerReducer = (currentState, action) => {
       return { ...currentState, email: action.payload };
     case "PASSWORD":
       return { ...currentState, password: action.payload };
-      case "CONFIRM_PASSWORD":
-        return { ...currentState, confirmPassword: action.payload };
+    case "CONFIRM_PASSWORD":
+      return { ...currentState, confirmPassword: action.payload };
     case "FIRST_NAME":
       return { ...currentState, firstName: action.payload };
     case "LAST_NAME":
@@ -57,30 +57,23 @@ function register() {
       firstName: registerData.firstName,
       lastName: registerData.lastName,
       password: registerData.password,
+      confirm_password:registerData.confirmPassword ,
       phone_number: registerData.phoneNumber,
       gender: registerData.gender,
     };
 
     registerAPI(payload)
       .then((res) => {
-        setDisabled(false);
-
-        if (res.data.messages == "Email has been used") {
-          setAlert({ emailAlreadyRegist: res.data.messages});
-        }  
-        if(res.data.messages === "Register Success!"){
-          if(registerData.password !== registerData.confirmPassword){
-            setAlert({ passwordDoesntMatch: true});
-            setModalVerif(false);
-            // setTimeout(()=>{
-            //   router.push({
-            //     pathname: "/tenant/login"
-            //   })
-            // },[3000])
-          } else{
-            setModalVerif(true);
-          }
+        if (res.data.message === "Email has been used") {
+          setAlert({ emailAlreadyRegist: res.data.message});
         }
+        if (res.data.message === "Password and confirm password is not the same") {
+          setAlert({ passwordDoesntMatch: res.data.message});
+        }
+        if (res.data.message === "Register Success!") {
+          setModalVerif(true);
+        }
+        setDisabled(false)
       })
       .catch((err) => {
         console.log(err);
@@ -88,7 +81,7 @@ function register() {
   };
   return (
     <div className="register-rent">
-      <ModalVerification isOpen={modalVerif}/>
+      <ModalVerification path={"tenant"} isOpen={modalVerif}/>
       <div>
         <div
           className="container absolute  px-5 sm:px-10 lg:px-20"
@@ -125,6 +118,28 @@ function register() {
               <strong className="font-bold">failed to register! </strong>
               <span className="block sm:inline">
                 {alert.emailAlreadyRegist}
+              </span>
+              <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                <svg
+                  className="fill-current h-6 w-6 text-white"
+                  role="button"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <title>Close</title>
+                  <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                </svg>
+              </span>
+            </div>
+          ) : null}
+          {alert.passwordDoesntMatch ? (
+            <div
+              className="bg-red-400 border border-red-400 w-[100%] lg:w-[50%]  text-white px-4 py-3 rounded relative"
+              role="alert"
+            >
+              <strong className="font-bold">failed to register! </strong>
+              <span className="block sm:inline">
+                {alert.passwordDoesntMatch}
               </span>
               <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
                 <svg

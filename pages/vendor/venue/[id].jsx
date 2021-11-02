@@ -1,12 +1,52 @@
-import React from "react";
+import React, {useEffect} from "react";
 import VendorLayout from "../../../components/Layout/VendorLayout";
 import Link from "next/link";
 import { TrashIcon, PencilAltIcon } from "@heroicons/react/solid";
 
-function detailVenue() {
+
+import { getDetailVenueAPI, deleteVenueAPI } from "../../../services/VenueApi";
+
+import { useRouter } from 'next/dist/client/router';
+
+import swal from "sweetalert";
+
+function detailVenue({venue}) {
+
+  const router = useRouter();
+
+  const deleteHandler = (id) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this imaginary file!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        deleteVenueAPI(id)
+        .then(res=>{
+          swal("Poof! Your imaginary venue has been deleted!", {
+            icon: "success",
+          });
+          router.push(
+            {
+              pathname:'/vendor/venue'
+            }
+          )
+        })
+        .catch(err=>{
+          console.log(err);
+        })
+      } else {
+        swal("Your imaginary venue is safe!");
+      }
+    });
+  }
+
   return (
     <div className="detail-venue">
-      <div className="title">Gedung Serbaguna PerlitaJaya</div>
+      <div className="title">{venue.name}</div>
 
       <div className="img-list grid grid-cols-2 gap-3 mt-10">
         <div className="bg-rose-300 ...">
@@ -24,26 +64,18 @@ function detailVenue() {
       </div>
 
       <div className="title mt-10">
-        Jl. Gatot Subroto no. 41 Bandung, Jawa Barat.{" "}
+        {venue.address}{" "}
       </div>
       <div className="deskripsi-venue">
         <div className="flex w-full justify-between my-8">
-          <p className="text-md text-gray-800 mt-0">Kapasitas 500 Orang</p>
-          <p className="text-md text-red-500">IDR 5,000,000</p>
+          <p className="text-md text-gray-800 mt-0">Kapasitas {venue.capacity} Orang</p>
+          <p className="text-md text-red-500">IDR {venue.price}</p>
         </div>
         <p className="text-sm font-light">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum
+          {venue.description}
         </p>
         <div className="flex w-full justify-between my-8">
-          <Link href="/vendor/venue/editVenue">
+          <Link href={`/vendor/venue/editVenue/${venue.id}`}>
             <button
               className="bg-blue-500 font-xs hover:bg-blue-700 text-white rounded-2xl  py-2 px-3 justify-around flex focus:outline-none focus:shadow-outline"
               type="button"
@@ -53,21 +85,32 @@ function detailVenue() {
               Edit Venue
             </button>
           </Link>
-          <Link href="/vendor/venue/addVenue">
             <button
               className="bg-red-500 font-xs hover:bg-red-600 text-white rounded-2xl  py-2 px-3 justify-around flex focus:outline-none focus:shadow-outline"
               type="button"
               style={{ fontSize: "16px" }}
+              onClick={() => deleteHandler(venue.id)}
             >
               <TrashIcon className="h-7 bg-red-500 text-white rounded-full p-1 cursor-pointer mr-3" />{" "}
               Delete Venue
             </button>
-          </Link>
+  
         </div>
       </div>
     </div>
   );
 }
 
+export async function getServerSideProps({params}){
+  const venue = await getDetailVenueAPI(params.id)
+      .then(res=> res.data.data);
+  
+  return{
+      props: {
+          venue
+      }
+  }
+
+}
 detailVenue.Layout = VendorLayout;
 export default detailVenue;

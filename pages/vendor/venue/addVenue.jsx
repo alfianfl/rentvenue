@@ -293,7 +293,7 @@ function addVenue() {
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="username"
           >
-            Patokan Alamat (Nama jalan)
+            Alamat Lengkap
           </label>
           <input
             className="shadow text-sm appearance-none border border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

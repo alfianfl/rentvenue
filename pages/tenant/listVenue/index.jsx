@@ -1,6 +1,8 @@
 import React from "react";
 import Link from "next/link";
 
+import { useDispatch, useSelector } from "react-redux";
+
 const initialFilter = ["Semua kategori", "Termahal", "Termurah", "Terdekat"];
 const item = [{}, {}, {}, {}, {}];
 function index() {
@@ -23,8 +25,8 @@ function index() {
                   className={
                     "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block hover:bg-blue-800 cursor-pointer leading-normal " +
                     (openTab === 1
-                      ? "text-white bg-" + color + "-600"
-                      : "text-" + color + "-600 bg-white")
+                      ? "text-white bg-blue-600"
+                      : "text-white bg-white")
                   }
                   onClick={(e) => {
                     e.preventDefault();

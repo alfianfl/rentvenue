@@ -20,8 +20,6 @@ function index() {
     dispatch(fetchVenue(vendorId));
   }, [dispatch]);
 
-
-  
   return (
     <div className="vendor-venue">
       <div className="title">
@@ -39,14 +37,18 @@ function index() {
             </button>
           </Link>
       </div>
-
-        <VendorVenue />
-   
+      <div className="relative m-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
+    {
+      venueData.venue.map(venue=>(
+        <VendorVenue data={venue} />
+      ))
+    }
+   </div>
       
       <div className="title mt-20 mb-10">
         Venue yang belum terverifikasi admin
       </div>
-      <VendorVenue />
+      {/* <VendorVenue /> */}
     </div>
   );
 }

@@ -3,12 +3,14 @@ export const fetchVenue = (id) => {
   return (dispatch) => {
     dispatch(fetchVenueRequest());
     getVenueAPI(id)
-        .then(res=>{
-            console.log(res);
-        })
-        .then(err=>{
-            console.log(err);
-        })
+    .then((response) => {
+        const venue = response.data.data;
+        dispatch(fetchVenueSuccess(venue));
+      })
+      .catch((err) => {
+        const errMsg = err.message;
+        dispatch(fetchVenueFailure(errMsg));
+      });
     }
 };
 export const fetchVenueRequest = () => {
@@ -17,10 +19,10 @@ export const fetchVenueRequest = () => {
   };
 };
 
-export const fetchVenueSuccess = (Products) => {
+export const fetchVenueSuccess = (venue) => {
   return {
     type: "FETCH_VENUE_SUCCESS",
-    payload: Products,
+    payload: venue,
   };
 };
 export const fetchVenueFailure = (errMsg) => {
