@@ -4,6 +4,10 @@ export const addVenueAPI = (payload) => {
   return API.post("/venue", payload, {withCredentials:true});
 };
 
+export const getAllVenueAPI = () => {
+  return API.get("/venue");
+};
+
 export const getVenueAPI = (id) => {
   return API.get(`/vendor/${id}/venue/notverified`);
 };

@@ -9,6 +9,7 @@ import dummy from "../../assets/dummy.jpg";
 
 
 function search({searchResult}) {
+    console.log(searchResult.data);
     const router = useRouter();
     const {location, startDate, endDate, noOfGuests} = router.query;
 
@@ -32,16 +33,18 @@ function search({searchResult}) {
                     </div>
                     <div className="flex flex-col">
                         {
-                            searchResult.map(item=> (
+                            searchResult.data.length ===0 ? <h1 className="text-2xl font-bold">Data tidak ditemukan...</h1>
+                            :
+                            searchResult.data.map(item=> (
                                 <InfoCard 
-                                    key={item.img}
+                                    id={item.id}
+                                    key={item.id}
                                     img={dummy}
-                                    description={'Gedung serbaguna untuk segala kegiatan'}
-                                    star={item.star}
-                                    title={'Gedung Serbaguna'}
-                                    price={2000000}
+                                    description={item.description}
+                                    title={item.name}
+                                    price={item.price}
                                     total={"/Day"}
-                                    location={"Jakarta"}
+                                    location={item.city}
 
                                 />
                             ))
@@ -57,8 +60,10 @@ function search({searchResult}) {
     )
 }
 
-export async function getServerSideProps(){
-    const searchResult = await fetch("https://links.papareact.com/isz")
+export async function getServerSideProps({ query }){
+
+    const {location, startDate, endDate} = query; 
+    const searchResult = await fetch(`http://localhost:19089/api/venue/search?city=${location}&capacity=100&start_book=2021-11-20&finish_book=2021-11-26`)
         .then(res=> res.json());
     
     return{

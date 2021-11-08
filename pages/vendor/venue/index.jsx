@@ -7,17 +7,22 @@ import { VendorVenue } from "../../../components/Card";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 
-import {fetchVenue} from "../../../redux";
+import {fetchVenue, fetchVenueVerified} from "../../../redux";
 import Cookies from "js-cookie";
 
 function index() {
   const venueData = useSelector(state=>state.venue);
+  const venueDataVerified = useSelector(state=>state.venueVerified);
   const dispatch = useDispatch();
+
+  console.log("v = " + venueDataVerified.venue);
+  console.log(venueData.venue);
 
   const vendorId = Cookies.get("vendorId");
 
   useEffect(() => {
     dispatch(fetchVenue(vendorId));
+    dispatch(fetchVenueVerified(vendorId));
   }, [dispatch]);
 
   return (
@@ -38,17 +43,24 @@ function index() {
           </Link>
       </div>
       <div className="relative m-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
-    {
-      venueData.venue.map(venue=>(
-        <VendorVenue data={venue} />
-      ))
-    }
-   </div>
-      
+        {
+          venueDataVerified.venue.map(venue=>(
+            <VendorVenue data={venue} />
+          ))
+        }
+      </div>
       <div className="title mt-20 mb-10">
         Venue yang belum terverifikasi admin
       </div>
-      {/* <VendorVenue /> */}
+      <div className="relative m-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
+        {
+          venueData.venue.map(venue=>(
+            <VendorVenue data={venue} />
+          ))
+        }
+      </div>
+      
+
     </div>
   );
 }

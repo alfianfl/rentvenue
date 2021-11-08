@@ -52,12 +52,14 @@ function SideBarVendor({ navMenu, children }) {
         {/* nav */}
         <nav>
           {navMenu.map((menu, index) => (
-            <a
-              key={index}
-              className="block nav-vendor py-2.5 px-4 my-3 rounded transition duration-200 font-bold hover:text-white"
-            >
-            <Link href={menu.href}><span>{menu.nama}</span></Link>
-            </a>
+            <Link href={menu.href}>
+              <a
+                key={index}
+                className="block nav-vendor py-2.5 px-4 my-3 rounded transition duration-200 font-bold hover:text-white"
+              >
+              <span>{menu.nama}</span>
+              </a>
+            </Link>
           ))}
         </nav>
       </div>

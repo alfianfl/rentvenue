@@ -33,6 +33,10 @@ function login() {
     emailNotVerified: false,
     passwordDoesntMatch:false
   });
+  const [token, setToken] = useState(() => {
+    const cookie = Cookies.get("userId");
+    return cookie ? cookie : false;
+  });
 
   const router = useRouter();
 
@@ -46,13 +50,13 @@ function login() {
 
     loginAPI(payload)
     .then((res) => {
-      console.log(res.data.message);
       if(res.data.message === "Please verify you email first"){
         setAlert({emailNotVerified: res.data.message});
       }else{
         if(res.data.message === "Email and password didn't match"){
           setAlert({passwordDoesntMatch:res.data.message})
         }else{
+          setToken(res.data.data.UserId);
           router.push({
             pathname: "/tenant",
           });
@@ -66,6 +70,13 @@ function login() {
       });
   };
 
+  useEffect(() => {
+    if (token === false) {
+      Cookies.remove("userId", { path: "" });
+    } else {
+      Cookies.set("userId", token, { path: "" });
+    }
+  }, [token]);
 
   return (
     <div className="login-rent">

@@ -56,6 +56,8 @@ function login() {
         }else{
           if(res.data.message === "Email and password didn't match"){
             setAlert({passwordDoesntMatch:res.data.message})
+          }else if(res.data.message === "Email is not registered"){
+            setAlert({passwordDoesntMatch:res.data.message})
           }else{
             setToken(res.data.data.VendorId);
             router.push({

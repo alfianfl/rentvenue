@@ -15,13 +15,26 @@ import Geocoder from "react-map-gl-geocoder";
 
 import { StarIcon } from "@heroicons/react/solid";
 
+import { getDetailVenueAPI } from "../../../services/VenueApi";
+import { bookingAPI } from "../../../services/TransactionAPI";
+import { ModalBooking } from "../../../components/Modal";
+import Cookies from "js-cookie";
+
+import moment from "moment";
+
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYWxmaWFuZmwiLCJhIjoiY2t0amQwb3oyMWFuZzJwcnRzZG90eWZkbCJ9.zn3csz72YfegBayAqOuWDA";
 
-function booking() {
+function booking({ venue }) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [dayBook, setDayBook] = useState(1);
+  const [bookToken, setBookToken] = useState(false);
+  const [modalBook, setModalBook] = useState(false);
+
+  console.log(new Date());
+
+  console.log(venue);
 
   const [viewport, setViewport] = useState({
     latitude: 37.7577,
@@ -67,6 +80,30 @@ function booking() {
     setEndDate(ranges.selection.endDate);
   };
 
+  const bookingHandler = () => {
+    const startBook = moment(startDate);
+    const endBook = moment(endDate);
+
+    const payload = {
+      VenueId: venue.id,
+      start_book: startBook.format("YYYY-MM-DDThh:mm:ssZ"),
+      finish_book: endBook.format("YYYY-MM-DDThh:mm:ssZ"),
+    };
+    bookingAPI(payload)
+      .then((res) => {
+        console.log(res.data.redirect_url);
+        if (res.data.redirect_url) {
+          setModalBook(true);
+          setBookToken(res.data.redirect_url);
+        } else {
+          alert("tanggal sudah terisi");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     var oneDay = 24 * 60 * 60 * 1000;
     const day =
@@ -75,17 +112,23 @@ function booking() {
       ) + 1;
     setDayBook(day);
   });
+
+  useEffect(() => {
+    Cookies.set("bookingToken", bookToken, { path: "" });
+  }, [bookToken]);
   return (
     <div className="booking-page">
       <div className="container px-0 lg:px-20 py-20">
-        <h1 className="font-bold text-lg lg:text-2xl lg:text-left text-center mb-4 lg:px-0 px-5">Gedung Serbaguna Jayabaya</h1>
+        <h1 className="font-bold text-lg lg:text-2xl lg:text-left text-center mb-4 lg:px-0 px-5">
+          {venue.name}
+        </h1>
         <div className=" lg:w-1/3 text-sm lg:text-md flex justify-between mb-4 lg:px-0 px-5">
           <span className="flex ">
             {" "}
             <StarIcon className="h-6 text-yellow-400 mr-3 " />{" "}
             <span className="my-auto">4,5 (21 Ulasan)</span>{" "}
           </span>
-          <span className="font-bold">Jl. Gatot Subroto no. 41</span>
+          <span className="font-bold">{venue.address}</span>
         </div>
         <div className="mb-14">
           <SwiperBooking>
@@ -118,21 +161,11 @@ function booking() {
           </SwiperBooking>
         </div>
         <div className="justify-center lg:flex lg:justify-between w-full ">
-          <p className="mr-0 lg:mr-20">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum
-          </p>
+          <p className="mr-0 lg:mr-20">{venue.description}</p>
           <div className="relative ml-0 lg:ml-20 max-w-sm w-[100%] lg:w-[350px] bg-white shadow-2xl rounded-3xl p-8 mb-3 cursor-pointer ">
             <div className="mt-4 pl-2 mb-2 flex justify-between ">
               <p className="text-sm text-red-500">
-                IDR 5,000,000{" "}
+                IDR {venue.price}{" "}
                 <span className="font-bold text-black">/hari</span>
               </p>
               <p className="text-xs text-gray-800 mt-0 flex">
@@ -151,21 +184,26 @@ function booking() {
               </div>
             </div>
             <div className="flex justify-center">
-              <span className="text-sm text-white px-10 py-3 rounded-xl bg-blue-500 hover:bg-blue-700 text-center cursor-pointer">
+              <span
+                onClick={bookingHandler}
+                className="text-sm text-white px-10 py-3 rounded-xl bg-blue-500 hover:bg-blue-700 text-center cursor-pointer"
+              >
                 Booking
               </span>
             </div>
             <div className="mt-4 pl-2 mb-2 flex justify-between ">
               <p className="text-sm">
-                IDR 5,000,000
+                IDR {venue.price}
                 <span className="font-bold text-black"> X {dayBook} Hari</span>
               </p>
-              <p className="text-xs text-gray-800 mt-0">IDR 10,000,000</p>
+              <p className="text-xs text-gray-800 mt-0">
+                IDR {dayBook * venue.price}
+              </p>
             </div>
             <div className="mt-4 pl-2 mb-2 flex justify-between ">
               <p className="text-lg font-bold">Total</p>
               <p className="text-lg text-gray-800 mt-0 font-bold">
-                IDR 10,000,000
+                IDR {dayBook * venue.price}
               </p>
             </div>
           </div>
@@ -198,9 +236,32 @@ function booking() {
             </MapGL>
           </div>
         </div>
+
+        <h1 className="font-bold text-2xl">Ulasan</h1>
+        <div>
+          <div className="flex">
+            <img src="" alt="profile" />
+            <span className="ml-5">Naufal</span>
+          </div>
+
+          <div className="rating">
+            {" "}
+            <p className="flex items-center">
+              <StarIcon className="h-5 text-red-400" />
+            </p>
+          </div>
+        </div>
       </div>
+      <ModalBooking path={bookToken} isOpen={modalBook} />
     </div>
   );
 }
-
+export async function getServerSideProps({ params }) {
+  const venue = await getDetailVenueAPI(params.id).then((res) => res.data.data);
+  return {
+    props: {
+      venue,
+    },
+  };
+}
 export default booking;

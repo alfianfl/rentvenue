@@ -1,13 +1,24 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Link from "next/link";
 
 import { useDispatch, useSelector } from "react-redux";
 
+import {fetchUserVenue} from "../../../redux";
+
 const initialFilter = ["Semua kategori", "Termahal", "Termurah", "Terdekat"];
-const item = [{}, {}, {}, {}, {}];
 function index() {
   const [openTab, setOpenTab] = React.useState(1);
   const color = "blue";
+
+  const venueData = useSelector(state=>state.userVenue);
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    dispatch(fetchUserVenue());
+  }, [dispatch]);
+
+  console.log(venueData);
   return (
     <>
       <div className="flex flex-wrap px-10 lg:px-20 pt-10 pb-20">
@@ -44,7 +55,7 @@ function index() {
           </ul>
         </div>
         <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
-          {item.map((x) => (
+          {venueData.venue.map((venue) => (
             <div className="relative max-w-sm w-[300px] bg-white shadow-2xl rounded-3xl p-8 mx-1 my-3 cursor-pointer ">
               <div className="overflow-x-hidden rounded-2xl relative">
                 <img
@@ -55,17 +66,17 @@ function index() {
               <div className="mt-4 pl-2 mb-2 flex justify-between ">
                 <div>
                   <p className="text-lg font-semibold text-gray-900 mb-0">
-                    Gedung Serbaguna PerlitaJaya
+                    {venue.name}
                   </p>
                   <p className="text-xs text-gray-800 mt-0">
-                    Jl. Gatot Subroto no. 41
+                    {venue.adddress}
                   </p>
-                  <p className="text-sm text-red-500">IDR 5,000,000</p>
+                  <p className="text-sm text-red-500">IDR {venue.price}</p>
                 </div>
               </div>
               <div className="flex justify-center">
                 <span className="text-sm text-blue-600 text-center">
-                  <Link href="/tenant/booking/1">Detail</Link>
+                  <Link href={`/tenant/booking/${venue.id}`}>Detail</Link>
                 </span>
               </div>
             </div>

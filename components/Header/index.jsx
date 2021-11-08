@@ -16,6 +16,7 @@ import {
 
 } from '@heroicons/react/solid'
 import { useRouter } from 'next/dist/client/router';
+import Dropdown from '../Dropdown';
 function Headers() {
 
     const [searchInput, setSearchInput] = useState('');
@@ -78,11 +79,12 @@ function Headers() {
             <div className="flex items-center justify-end space-x-4 text-gray-500">
                 <p className="hidden md:hidden cursor-pointer md:inline">Become a host</p>
                 <GlobeAltIcon className='h-6 hidden md:hidden' />
-
-                <div className="flex items-center space-x-2 border-2 rounded-full p-2 cursor-pointer">
-                    <MenuIcon className='h-6'/>
-                    <UserCircleIcon className="h-6" />
-                </div>
+                <Dropdown>
+                    <div className="flex items-center space-x-2 border-2 rounded-full p-2 cursor-pointer">
+                        <MenuIcon className='h-6'/>
+                        <UserCircleIcon className="h-6" />
+                    </div>
+                </Dropdown>
             </div>
 
             {searchInput && (

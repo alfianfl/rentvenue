@@ -2,30 +2,33 @@ import React, { useState, useReducer } from "react";
 import { Sidebar } from "../../../components/Sidebar";
 import Image from "next/image";
 import { CameraIcon } from "@heroicons/react/solid";
-import { ProfileAPI } from "../../../services/ProfileAPI";
+import { ProfileVendorAPI } from "../../../services/ProfileAPI";
 import Cookies from "js-cookie";
 import swal from "sweetalert";
 
+import EmptyLayout from "../../../components/Layout/EmptyLayout";
+import Link from "next/link";
+
 
 const initialState = {
-  firstName: "",
-  lastName: "",
-  gender: "",
+  vendor_name: "",
+  description: "",
+  address: "",
   phone_number: "",
   password: "",
-  profile_picture:""
+  profile_picture:"",
 };
 
 const profileReducer = (currentState, action) => {
   switch (action.type) {
     case "PASSWORD":
       return { ...currentState, password: action.payload };
-    case "FIRST_NAME":
-      return { ...currentState, firstName: action.payload };
-    case "LAST_NAME":
-      return { ...currentState, lastName: action.payload };
-    case "GENDER":
-      return { ...currentState, gender: action.payload };
+    case "VENDOR_NAME":
+      return { ...currentState, vendor_name: action.payload };
+    case "DESCRIPTION":
+      return { ...currentState, description: action.payload };
+    case "ADDRESS":
+      return { ...currentState, address: action.payload };
     case "PHONE_NUMBER":
       return { ...currentState, phone_number: action.payload };
     case "RAW":
@@ -51,7 +54,7 @@ function persolnalInformation() {
   };
 
 
-  const userId = Cookies.get("userId");
+  const vendorId = Cookies.get("vendorId");
 
   const sumbmitHandler = () => {
     const data = new FormData();
@@ -67,7 +70,7 @@ function persolnalInformation() {
     // data.append("gender", profileData.gender);
     // data.append("profile_picture", image.raw);
 
-    ProfileAPI(userId, data)
+    ProfileVendorAPI(vendorId, data)
       .then(res=>{
         console.log(res.data.message);
 
@@ -120,77 +123,53 @@ function persolnalInformation() {
                 </div>
               </div>
             </div>
-            <div className="flex flex-wrap -mx-3 mb-6">
-              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  htmlFor="grid-first-name"
-                >
-                  First Name* 
-                </label>
-                <input
-                  className="shadow appearance-none border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="grid-first-name"
-                  type="text"
-                  placeholder="Jane"
-                  onChange={(e) =>
-                    dispatch({ type: "FIRST_NAME", payload: e.target.value })
-                  }
-                />
-                {/* <p className="text-red-500 text-xs italic">
-                  Please fill out this field.
-                </p> */}
-              </div>
-              <div className="w-full md:w-1/2 px-3">
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  htmlFor="grid-last-name"
-                >
-                  Last Name*
-                </label>
-                <input
-                  className="shadow appearance-none border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="grid-last-name"
-                  type="text"
-                  onChange={(e) =>
-                    dispatch({ type: "LAST_NAME", payload: e.target.value })
-                  }
-                  placeholder="Doe"
-                />
-              </div>
-            </div>
-            <div className="mb-6">
+            <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-light mb-2"
                 htmlFor="username"
               >
-                Gender*
+                Vendor name*
               </label>
-              <div className="custom_radio flex justify-between">
-                <div>
-                  <input
-                    type="radio"
-                    id="featured-1"
-                    name="featured"
-                    onChange={(e) =>
-                      dispatch({ type: "GENDER", payload: "laki-laki" })
-                    }
-                  />
-                  <label htmlFor="featured-1">Laki-laki</label>
-                </div>
-                <br />
-                <div>
-                  <input
-                    type="radio"
-                    id="featured-2"
-                    name="featured"
-                    onChange={(e) =>
-                      dispatch({ type: "GENDER", payload: "perempuan" })
-                    }
-                  />
-                  <label htmlFor="featured-2">Perempuan</label>
-                </div>
-              </div>
+              <input
+                className="shadow appearance-none border border-grey-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="vendorName"
+                type="text"
+                onChange={(e) =>
+                  dispatch({ type: "VENDOR_NAME", payload: e.target.value })
+                }
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-light mb-2"
+                htmlFor="username"
+              >
+                Address
+              </label>
+              <input
+                className="shadow appearance-none border border-grey-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="vendorName"
+                type="text"
+                onChange={(e) =>
+                  dispatch({ type: "ADDRESS", payload: e.target.value })
+                }
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-light mb-2"
+                htmlFor="username"
+              >
+               Description
+              </label>
+              <input
+                className="shadow appearance-none border border-grey-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="vendorName"
+                type="text"
+                onChange={(e) =>
+                  dispatch({ type: "DESCRIPTION", payload: e.target.value })
+                }
+              />
             </div>
             <div className="mb-6">
               <label
@@ -202,7 +181,7 @@ function persolnalInformation() {
               <input
                 className="shadow appearance-none border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="phone number"
-                type="text"
+                type="number"
                 onChange={(e) =>
                   dispatch({ type: "PHONE_NUMBER", payload: e.target.value })
                 }
@@ -234,6 +213,7 @@ function persolnalInformation() {
           </form>
           <div className="flex items-center justify-end">
             <div>
+              <Link href="/vendor/venue">
               <button
                 className="rounded-2xl font-bold py-2 px-5 mr-5 focus:outline-none focus:shadow-outline"
                 type="button"
@@ -241,6 +221,7 @@ function persolnalInformation() {
               >
                 Back to Home
               </button>
+              </Link>
               <button
                 className="button-update-profile rounded-2xl text-white font-bold py-2 px-5 focus:outline-none focus:shadow-outline"
                 type="button"
@@ -255,5 +236,7 @@ function persolnalInformation() {
     </div>
   );
 }
+
+persolnalInformation.Layout = EmptyLayout;
 
 export default persolnalInformation;
