@@ -86,7 +86,6 @@ function register() {
         <div
           className="container absolute  px-5 sm:px-10 lg:px-20"
           style={{
-            backgroundImage: `url("https://images.unsplash.com/photo-1592890288564-76628a30a657?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cGVyc29uJTIwb24lMjBwaG9uZXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80")`,
             backgroundSize: "cover",
             backgroundAttachment: "fixed",
           }}
