@@ -23,3 +23,8 @@ export const getDetailVenueAPI = (id) => {
 export const deleteVenueAPI = (id) => {
   return API.delete(`/venue/${id}`);
 };
+
+export const getAnalyticAPI = (id) => {
+  return API.get(`/vendor/${id}/analytic`);
+};
+

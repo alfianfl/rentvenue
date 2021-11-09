@@ -9,11 +9,12 @@ function Map({searchResult}) {
     // Transformn the search result object into getCenter
     const [selectedLocation, setSelectedLocation] = React.useState({});
 
-    const coordinates = searchResult.data.map(result =>({
+    const coordinates = searchResult.map(result =>({
         longitude: result.longitude,
         latitude:result.latitude
     }));
     
+    console.log(" test" + coordinates);
     const center = getCenter(coordinates);
 
     const [viewport, setViewport] = React.useState({
@@ -33,7 +34,7 @@ function Map({searchResult}) {
                     mapboxApiAccessToken={process.env.mapbox_key}
                     onViewportChange={(viewport) => setViewport(viewport)}
                 >
-                    {searchResult.data.map((result)=> (
+                    {searchResult.map((result)=> (
                         <div key={result.longitude}>
                             {/* <Marker
                                 longitude={result.longitude}

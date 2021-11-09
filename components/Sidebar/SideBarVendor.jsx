@@ -1,8 +1,18 @@
 import React from "react";
 import logo from "../../assets/Logo.png";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 function SideBarVendor({ navMenu, children }) {
+  const router = useRouter();
+
+  const logoutHandler = () =>{
+    Cookies.remove("jwt", { path: "" });
+    router.push({
+      pathname : "/vendor/login"
+    })
+  }
   return (
     <div className="relative min-h-screen md:flex ">
       {/* mobile menu bar */}
@@ -56,6 +66,7 @@ function SideBarVendor({ navMenu, children }) {
               <a
                 key={index}
                 className="block nav-vendor py-2.5 px-4 my-3 rounded transition duration-200 font-bold hover:text-white"
+                onClick={menu.nama === "Logout" && logoutHandler}
               >
               <span>{menu.nama}</span>
               </a>

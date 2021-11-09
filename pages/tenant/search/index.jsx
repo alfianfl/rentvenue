@@ -1,22 +1,19 @@
 import React from 'react';
 
-import {InfoCard} from '../../components/Card';
-import Map from '../../components/Map';
+import {InfoCard} from '../../../components/Card';
+import Map from '../../../components/Map';
 
 import { format } from 'date-fns';
 import { useRouter } from 'next/dist/client/router';
-import dummy from "../../assets/dummy.jpg";
-
+import dummy from "../../../assets/dummy.jpg";
 
 function search({searchResult}) {
-    console.log(searchResult.data);
     const router = useRouter();
     const {location, startDate, endDate, noOfGuests} = router.query;
 
     const formatedStartDate = format(new Date(startDate), "dd MMMM yyyy")
     const formatedEndDate = format(new Date(endDate), "dd MMMM yyyy")
     const range = `${formatedStartDate} - ${formatedEndDate}`
-    
 
     return (
         <div className="relative">
@@ -33,7 +30,7 @@ function search({searchResult}) {
                     </div>
                     <div className="flex flex-col">
                         {
-                            searchResult.data.length ===0 ? <h1 className="text-2xl font-bold">Data tidak ditemukan...</h1>
+                            searchResult.data.length === 0 ? <h1 className="text-2xl font-bold">Data tidak ditemukan...</h1>
                             :
                             searchResult.data.map(item=> (
                                 <InfoCard 
@@ -52,7 +49,7 @@ function search({searchResult}) {
                     </div>
                 </section>
                 <section className="hidden xl:inline-flex xl:min-w:[600px] h-screen sticky top-0">
-                    <Map searchResult={searchResult}/>
+                    <Map searchResult={searchResult.data}/>
                 </section>
 
             </div>

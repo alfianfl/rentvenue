@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {fetchUserVenue} from "../../../redux";
 
-const initialFilter = ["Semua kategori", "Termahal", "Termurah", "Terdekat"];
+const initialFilter = ["Semua kategori", "Termahal", "Termurah"];
 function index() {
   const [openTab, setOpenTab] = React.useState(1);
   const color = "blue";

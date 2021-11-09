@@ -18,13 +18,17 @@ const navMenu = [
         href: "/vendor/checkIn-checkOut",
         nama: "Check-in/CheckOut"
     },
-    {
-        href: "/vendor/feedback",
-        nama: "Feedback"
-    },
+    // {
+    //     href: "/vendor/feedback",
+    //     nama: "Feedback"
+    // },
     {
         href: "/vendor/profile/persolnalInformation",
         nama: "Profile"
+    },
+    {
+        href: "",
+        nama: "Logout"
     },
 ]
 

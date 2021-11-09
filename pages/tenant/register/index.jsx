@@ -1,10 +1,10 @@
 import React, { useReducer, useState } from "react";
-import logo from "../../assets/Logo.png";
+import logo from "../../../assets/Logo.png";
 import Image from "next/image";
-import EmptyLayout from "../../components/Layout/EmptyLayout";
+import EmptyLayout from "../../../components/Layout/EmptyLayout";
 import { useRouter } from "next/dist/client/router";
-import { registerAPI } from "../../services/AuthAPI";
-import { ModalVerification } from "../../components/Modal";
+import { registerAPI } from "../../../services/AuthAPI";
+import { ModalVerification } from "../../../components/Modal";
 
 import Link from "next/link";
 

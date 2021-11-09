@@ -16,6 +16,7 @@ import Geocoder from "react-map-gl-geocoder";
 import { StarIcon } from "@heroicons/react/solid";
 
 import { getDetailVenueAPI } from "../../../services/VenueApi";
+import { getFeedbackAPI } from "../../../services/FeedbackAPI";
 import { bookingAPI } from "../../../services/TransactionAPI";
 import { ModalBooking } from "../../../components/Modal";
 import Cookies from "js-cookie";
@@ -25,16 +26,12 @@ import moment from "moment";
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYWxmaWFuZmwiLCJhIjoiY2t0amQwb3oyMWFuZzJwcnRzZG90eWZkbCJ9.zn3csz72YfegBayAqOuWDA";
 
-function booking({ venue }) {
+function booking({ venue, feedback }) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [dayBook, setDayBook] = useState(1);
   const [bookToken, setBookToken] = useState(false);
   const [modalBook, setModalBook] = useState(false);
-
-  console.log(new Date());
-
-  console.log(venue);
 
   const [viewport, setViewport] = useState({
     latitude: 37.7577,
@@ -104,6 +101,14 @@ function booking({ venue }) {
       });
   };
 
+  const getStar = (length) => {
+    let rating = [];
+    for (let i = 0; i < length; i++) {
+      rating.push(<StarIcon className="h-5 text-yellow-500" style={{fontSize:"30px"}} key={i} />);
+    }
+    return <>{rating}</>;
+  };
+
   useEffect(() => {
     var oneDay = 24 * 60 * 60 * 1000;
     const day =
@@ -118,7 +123,7 @@ function booking({ venue }) {
   }, [bookToken]);
   return (
     <div className="booking-page">
-      <div className="container px-0 lg:px-20 py-20">
+      <div className="container px-0 lg:px-20 py-20 m-auto">
         <h1 className="font-bold text-lg lg:text-2xl lg:text-left text-center mb-4 lg:px-0 px-5">
           {venue.name}
         </h1>
@@ -237,19 +242,32 @@ function booking({ venue }) {
           </div>
         </div>
 
-        <h1 className="font-bold text-2xl">Ulasan</h1>
-        <div>
-          <div className="flex">
-            <img src="" alt="profile" />
-            <span className="ml-5">Naufal</span>
-          </div>
+        <div className="my-20">
+          <h1 className="font-bold text-4xl">Ulasan</h1>
+          {feedback.findFeedback.map((feedback, index) => (
+            <div key={index}>
+              <div className="flex items-center m-2 mt-5 space-x-4 rounded-xl">
+                <div className="relative h-14 w-14">
+                  <Image
+                    src={
+                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                    }
+                    layout="fill"
+                    className="rounded-lg"
+                  />
+                </div>
+                <div>
+                  <span className="font-bold">Naufal Ariful</span>
+                </div>
+              </div>
 
-          <div className="rating">
-            {" "}
-            <p className="flex items-center">
-              <StarIcon className="h-5 text-red-400" />
-            </p>
-          </div>
+              <div className="rating">
+                {" "}
+                <p className="flex items-center my-2">{getStar(feedback.rating)}</p>
+                <p className="text-gray-400 text-sm">{feedback.feedback_content}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
       <ModalBooking path={bookToken} isOpen={modalBook} />
@@ -258,9 +276,11 @@ function booking({ venue }) {
 }
 export async function getServerSideProps({ params }) {
   const venue = await getDetailVenueAPI(params.id).then((res) => res.data.data);
+  const feedback = await getFeedbackAPI(params.id).then((res) => res.data.data);
   return {
     props: {
       venue,
+      feedback,
     },
   };
 }

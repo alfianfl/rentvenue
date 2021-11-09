@@ -31,7 +31,7 @@ function login() {
   const [disabled, setDisabled] = useState(false);
   const [alert, setAlert] = useState({
     emailNotVerified: false,
-    passwordDoesntMatch:false
+    passwordDoesntMatch: false,
   });
   const [token, setToken] = useState(() => {
     const cookie = Cookies.get("vendorId");
@@ -51,14 +51,14 @@ function login() {
 
     loginVendorAPI(payload)
       .then((res) => {
-        if(res.data.message === "Please activate your email first"){
-          setAlert({emailNotVerified: res.data.message});
-        }else{
-          if(res.data.message === "Email and password didn't match"){
-            setAlert({passwordDoesntMatch:res.data.message})
-          }else if(res.data.message === "Email is not registered"){
-            setAlert({passwordDoesntMatch:res.data.message})
-          }else{
+        if (res.data.message === "Please activate your email first") {
+          setAlert({ emailNotVerified: res.data.message });
+        } else {
+          if (res.data.message === "Email and password didn't match") {
+            setAlert({ passwordDoesntMatch: res.data.message });
+          } else if (res.data.message === "Email is not registered") {
+            setAlert({ passwordDoesntMatch: res.data.message });
+          } else {
             setToken(res.data.data.VendorId);
             router.push({
               pathname: "/vendor/venue",
@@ -96,8 +96,8 @@ function login() {
             />
           </div>
           <h1 className="font-bold text-xl mb-5">
-          Selamat Datang! <br />
-Silahkan login untuk masuk website RentVenue sebagai Vendor 
+            Selamat Datang! <br />
+            Silahkan login untuk masuk website RentVenue sebagai Vendor
           </h1>
           {alert.passwordDoesntMatch ? (
             <div
@@ -127,9 +127,7 @@ Silahkan login untuk masuk website RentVenue sebagai Vendor
               role="alert"
             >
               <strong className="font-bold">failed to register! </strong>
-              <span className="block sm:inline">
-                {alert.emailNotVerified}
-              </span>
+              <span className="block sm:inline">{alert.emailNotVerified}</span>
               <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
                 <svg
                   className="fill-current h-6 w-6 text-white"
@@ -201,6 +199,11 @@ Silahkan login untuk masuk website RentVenue sebagai Vendor
             <strong className="cursor-pointer">
               {" "}
               <Link href="/vendor/register">Sign Up</Link>
+            </strong>{" "}
+            atau{" "}
+            <strong className="cursor-pointer">
+              {" "}
+              <Link href="/tenant/login">Login sebagai tenant</Link>
             </strong>{" "}
           </h1>
         </div>

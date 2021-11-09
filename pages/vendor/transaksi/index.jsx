@@ -18,17 +18,6 @@ function transaksi() {
         { Header: 'Tanggal check-in', accessor: 'tanggalCheckIn' },
         { Header: 'Tanggal check-out', accessor: 'tanggalCheckOut' },
         { Header:'Status Pembayaran', accessor:'status'},
-        {
-            Header: 'Keterangan',
-            Cell: (props) => {
-                console.log(props.row.original)
-                return (
-                    <div className="d-flex justify-content-center">
-                        <button className="bg-red-600 px-4 py-2 rounded rounded-2xl text-white">Refund</button>
-                    </div>
-                )
-            }
-        }
     ]
 
     return (

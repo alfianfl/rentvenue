@@ -6,7 +6,7 @@ import { ProfileVendorAPI } from "../../../services/ProfileAPI";
 import Cookies from "js-cookie";
 import swal from "sweetalert";
 
-import EmptyLayout from "../../../components/Layout/EmptyLayout";
+import VendorLayout from "../../../components/Layout/VendorLayout";
 import Link from "next/link";
 
 
@@ -86,9 +86,8 @@ function persolnalInformation() {
   }
 
   return (
-    <div className="tenant-personal-information grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 px-5 lg:px-20 my-10 llg:my-20">
-      <Sidebar />
-      <div className="col-span-2">
+    <div className="tenant-personal-information w-full">
+      <div className="">
         <div className="container-change-profile px-5 md:px-10 lg:px-20 py-10">
           <form className="w-[full] lg:w-1/2" action="">
             <div className="mb-10">
@@ -131,7 +130,7 @@ function persolnalInformation() {
                 Vendor name*
               </label>
               <input
-                className="shadow appearance-none border border-grey-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow text-sm appearance-none border border-grey-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="vendorName"
                 type="text"
                 onChange={(e) =>
@@ -147,7 +146,7 @@ function persolnalInformation() {
                 Address
               </label>
               <input
-                className="shadow appearance-none border border-grey-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none text-sm border border-grey-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="vendorName"
                 type="text"
                 onChange={(e) =>
@@ -163,7 +162,7 @@ function persolnalInformation() {
                Description
               </label>
               <input
-                className="shadow appearance-none border border-grey-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none text-sm border border-grey-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="vendorName"
                 type="text"
                 onChange={(e) =>
@@ -179,7 +178,7 @@ function persolnalInformation() {
                 Phone Number*
               </label>
               <input
-                className="shadow appearance-none border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none text-sm border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="phone number"
                 type="number"
                 onChange={(e) =>
@@ -196,7 +195,7 @@ function persolnalInformation() {
                 Confirm Password*
               </label>
               <input
-                className="shadow appearance-none border rounded-2xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none text-sm border rounded-2xl w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 id="confirm-password"
                 type="password"
                 onChange={(e) =>
@@ -213,15 +212,6 @@ function persolnalInformation() {
           </form>
           <div className="flex items-center justify-end">
             <div>
-              <Link href="/vendor/venue">
-              <button
-                className="rounded-2xl font-bold py-2 px-5 mr-5 focus:outline-none focus:shadow-outline"
-                type="button"
-                style={{ backgroundColor: "white", color: "#0579aa" }}
-              >
-                Back to Home
-              </button>
-              </Link>
               <button
                 className="button-update-profile rounded-2xl text-white font-bold py-2 px-5 focus:outline-none focus:shadow-outline"
                 type="button"
@@ -237,6 +227,6 @@ function persolnalInformation() {
   );
 }
 
-persolnalInformation.Layout = EmptyLayout;
+persolnalInformation.Layout = VendorLayout;
 
 export default persolnalInformation;

@@ -1,11 +1,11 @@
 import React, { useReducer, useState, useEffect } from "react";
-import Banner from "../../components/Banner";
-import EmptyLayout from "../../components/Layout/EmptyLayout";
-import loginBg from "../../assets/imageLogin.png";
-import logo from "../../assets/Logo.png";
+import Banner from "../../../components/Banner";
+import EmptyLayout from "../../../components/Layout/EmptyLayout";
+import loginBg from "../../../assets/imageLogin.png";
+import logo from "../../../assets/Logo.png";
 import Image from "next/image";
 import { useRouter } from "next/dist/client/router";
-import { loginAPI } from "../../services/AuthAPI";
+import { loginAPI } from "../../../services/AuthAPI";
 import Cookies from "js-cookie";
 
 import Link from "next/link";
@@ -199,6 +199,11 @@ function login() {
             <strong className="cursor-pointer">
               {" "}
               <Link href="/tenant/register">Sign Up</Link>
+            </strong>{" "}
+            atau{" "}
+            <strong className="cursor-pointer">
+              {" "}
+              <Link href="/vendor/login">Login sebagai vendor</Link>
             </strong>{" "}
           </h1>
         </div>

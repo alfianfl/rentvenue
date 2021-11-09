@@ -17,8 +17,8 @@ import {
 } from '@heroicons/react/solid'
 import { useRouter } from 'next/dist/client/router';
 import Dropdown from '../Dropdown';
-function Headers() {
 
+function Headers() {
     const [searchInput, setSearchInput] = useState('');
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date())
@@ -53,7 +53,7 @@ function Headers() {
                 noOfGuests,
             }
         });
-        setSearchInput(false);
+        setSearchInput("");
     }
 
     return (
