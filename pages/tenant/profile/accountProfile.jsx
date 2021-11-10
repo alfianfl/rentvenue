@@ -1,9 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Sidebar } from "../../../components/Sidebar";
 import Image from "next/image";
-import { ProfileAPI } from "../../../services/ProfileAPI";
+import { getProfileAPI } from "../../../services/ProfileAPI";
+import Cookies from "js-cookie";
 
 function accountProfile() {
+  const userId = Cookies.get("userId");
+  const [user, setUser] = useState([]);
+
+  useEffect(() => {
+    getProfileAPI(userId)
+      .then((res) => {
+        console.log(res.data.data);
+        setUser(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   return (
     <div className="tenant-personal-information grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 px-5 lg:px-20 my-10 llg:my-20">
       <Sidebar />
@@ -14,7 +28,11 @@ function accountProfile() {
               <div className="flex items-center m-2 mt-5 space-x-4 rounded-xl">
                 <div className="relative h-32 w-32">
                   <Image
-                    src={ "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" }
+                    src={
+                      user.url
+                        ? user.url
+                        : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                    }
                     layout="fill"
                     className="rounded-full"
                   />
@@ -28,7 +46,7 @@ function accountProfile() {
               >
                 Email
               </label>
-                <p style={{color: "575757"}}>rentvenue@gmail.com</p>
+              <p style={{ color: "575757" }}>{user.email}</p>
             </div>
             <div className="mb-6">
               <label
@@ -37,7 +55,9 @@ function accountProfile() {
               >
                 Nama
               </label>
-                <p style={{color: "575757"}}>rentvenue@gmail.com</p>
+              <p style={{ color: "575757" }}>
+                {user.firstName} {user.lastName}
+              </p>
             </div>
             <div className="mb-6">
               <label
@@ -46,7 +66,7 @@ function accountProfile() {
               >
                 Gender
               </label>
-                <p style={{color: "575757"}}>rentvenue@gmail.com</p>
+              <p style={{ color: "575757" }}>{user.gender}</p>
             </div>
             <div className="mb-6">
               <label
@@ -55,7 +75,7 @@ function accountProfile() {
               >
                 Nomor Telepon
               </label>
-                <p style={{color: "575757"}}>rentvenue@gmail.com</p>
+              <p style={{ color: "575757" }}>{user.phone_number}</p>
             </div>
           </form>
         </div>
