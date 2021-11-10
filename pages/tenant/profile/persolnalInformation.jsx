@@ -5,6 +5,7 @@ import { CameraIcon } from "@heroicons/react/solid";
 import { ProfileAPI } from "../../../services/ProfileAPI";
 import Cookies from "js-cookie";
 import swal from "sweetalert";
+import { useRouter } from "next/router";
 
 
 const initialState = {
@@ -38,7 +39,9 @@ const profileReducer = (currentState, action) => {
 function persolnalInformation() {
   const [image, setImage] = useState({ preview: false, raw: undefined });
   const [profileData, dispatch] = useReducer(profileReducer, initialState);
+  const [loading, setLoading] = useState(false);
 
+  const router = useRouter();
   const handleChange = (e) => {
     if (e.target.files.length) {
       setImage({
@@ -54,6 +57,7 @@ function persolnalInformation() {
   const userId = Cookies.get("userId");
 
   const sumbmitHandler = () => {
+    setLoading(true);
     const data = new FormData();
 
     Object.keys(initialState).map(key => {
@@ -70,15 +74,18 @@ function persolnalInformation() {
     ProfileAPI(userId, data)
       .then(res=>{
         console.log(res.data.message);
-
         if(res.data.message === "Wrong Password!"){
-          alert(res.data.message)
+          swal(res.data.message)
+        } else if( res.data.message === "Please enter the password"){
+          swal(res.data.message)
         } else{
-          swal(res.data.message);
+          window.location.href = "/tenant/profile/accountProfile"
         }
+        setLoading(false);
       })
       .catch(err => {
         console.log(err);
+        setLoading(false);
       });
   }
 
@@ -242,9 +249,10 @@ function persolnalInformation() {
                 Back to Home
               </button>
               <button
-                className="button-update-profile rounded-2xl text-white font-bold py-2 px-5 focus:outline-none focus:shadow-outline"
+                className={`button-update-profile ${loading ? `cursor-wait bg-red-500` : `cursor-pointer bg-blue-500 hover:bg-blue-700`} rounded-2xl text-white font-bold py-2 px-5 focus:outline-none focus:shadow-outline`}
                 type="button"
                 onClick={sumbmitHandler}
+                disabled={loading ? true : false}
               >
                 Update Profile
               </button>

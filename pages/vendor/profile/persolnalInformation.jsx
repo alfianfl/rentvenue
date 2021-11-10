@@ -41,6 +41,7 @@ const profileReducer = (currentState, action) => {
 function persolnalInformation() {
   const [image, setImage] = useState({ preview: false, raw: undefined });
   const [profileData, dispatch] = useReducer(profileReducer, initialState);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     if (e.target.files.length) {
@@ -57,6 +58,8 @@ function persolnalInformation() {
   const vendorId = Cookies.get("vendorId");
 
   const sumbmitHandler = () => {
+
+    setLoading(true);
     const data = new FormData();
 
     Object.keys(initialState).map(key => {
@@ -75,12 +78,15 @@ function persolnalInformation() {
         console.log(res.data.message);
 
         if(res.data.message === "Wrong Password!"){
+          setLoading(false);
           alert(res.data.message)
         } else{
+          setLoading(false);
           swal(res.data.message);
         }
       })
       .catch(err => {
+        setLoading(false);
         console.log(err);
       });
   }
@@ -213,7 +219,7 @@ function persolnalInformation() {
           <div className="flex items-center justify-end">
             <div>
               <button
-                className="button-update-profile rounded-2xl text-white font-bold py-2 px-5 focus:outline-none focus:shadow-outline"
+                className={`button-update-profile rounded-2xl text-lg text-white font-bold py-2 px-5 ${loading ? `cursor-wait bg-red-500` : `cursor-pointer`} focus:outline-none focus:shadow-outline`}
                 type="button"
                 onClick={sumbmitHandler}
               >

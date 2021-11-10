@@ -4,13 +4,17 @@ import { useRouter } from "next/dist/client/router";
 
 const navMenu = [
   {
+    href: "/tenant/profile/accountProfile",
+    title: "Account Profile",
+  },
+  {
     href: "/tenant/profile/persolnalInformation",
     title: "Personal Information",
   },
-  {
-    href: "/tenant/profile/passwordManagement",
-    title: "Password Management",
-  },
+  // {
+  //   href: "/tenant/profile/passwordManagement",
+  //   title: "Password Management",
+  // },
 ];
 function SidebarProfile() {
   const {route} = useRouter();

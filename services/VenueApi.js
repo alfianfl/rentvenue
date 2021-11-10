@@ -4,8 +4,8 @@ export const addVenueAPI = (payload) => {
   return API.post("/venue", payload, {withCredentials:true});
 };
 
-export const getAllVenueAPI = () => {
-  return API.get("/venue");
+export const getAllVenueAPI = (city) => {
+  return API.get(`/venue`);
 };
 
 export const getVenueAPI = (id) => {
@@ -14,6 +14,10 @@ export const getVenueAPI = (id) => {
 
 export const getVenueVerifiedAPI = (id) => {
   return API.get(`/vendor/${id}/venue/verified`);
+};
+
+export const editVenueAPI = (id) => {
+  return API.patch(`/venue/${id}`);
 };
 
 export const getDetailVenueAPI = (id) => {
@@ -26,5 +30,21 @@ export const deleteVenueAPI = (id) => {
 
 export const getAnalyticAPI = (id) => {
   return API.get(`/vendor/${id}/analytic`);
+};
+
+export const getVenueByCityAPI = () => {
+  return API.get(`/venue/city`);
+};
+
+export const getVenueFilterCityAPI = () => {
+  return API.get(`/venue/city`);
+};
+
+export const getVenueCityAPI = (city) => {
+  return API.get(`/venue/search/city/${city}`);
+};
+
+export const getVenueCityFilterAPI = (payload) => {
+  return API.post(`/venue/search/city`, payload);
 };
 

@@ -15,9 +15,6 @@ function index() {
   const venueDataVerified = useSelector(state=>state.venueVerified);
   const dispatch = useDispatch();
 
-  console.log("v = " + venueDataVerified.venue);
-  console.log(venueData.venue);
-
   const vendorId = Cookies.get("vendorId");
 
   useEffect(() => {
@@ -28,7 +25,7 @@ function index() {
   return (
     <div className="vendor-venue">
       <div className="title">
-        Hi, [Nama Orang]. Anda memiliki [Jumlah] Venue
+        Hi,  Selamat datang di rentavenue
       </div>
       <div className="flex items-center justify-start mt-10">
           <Link href="/vendor/venue/addVenue">

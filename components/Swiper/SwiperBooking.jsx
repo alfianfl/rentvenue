@@ -17,13 +17,30 @@ export default function SwiperBooking({children}) {
   return (
     <>
       <Swiper
-        slidesPerView={2}
-        spaceBetween={30}
-        slidesPerGroup={2}
+        slidesPerView={1}
+        spaceBetween={0}
         loop={true}
         loopFillGroupWithBlank={true}
         pagination={{
           clickable: true,
+        }}
+        breakpoints={{
+          500: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          },
+          640: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          },
+          1024: {
+            slidesPerView: 2,
+            spaceBetween: 30,
+          },
+          1920: {
+            slidesPerView: 2,
+            spaceBetween: 30,
+          },
         }}
         navigation={true}
         className="mySwiper"

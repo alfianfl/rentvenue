@@ -11,6 +11,8 @@ function search({searchResult}) {
     const router = useRouter();
     const {location, startDate, endDate, noOfGuests} = router.query;
 
+    console.log(searchResult);
+
     const formatedStartDate = format(new Date(startDate), "dd MMMM yyyy")
     const formatedEndDate = format(new Date(endDate), "dd MMMM yyyy")
     const range = `${formatedStartDate} - ${formatedEndDate}`
@@ -59,8 +61,8 @@ function search({searchResult}) {
 
 export async function getServerSideProps({ query }){
 
-    const {location, startDate, endDate} = query; 
-    const searchResult = await fetch(`http://localhost:19089/api/venue/search?city=${location}&capacity=100&start_book=2021-11-20&finish_book=2021-11-26`)
+    const {location, startDate, endDate, noOfGuests} = query; 
+    const searchResult = await fetch(`https://rentavenue-backend.herokuapp.com/api/venue/search?city=${location}&capacity=${noOfGuests}&start_book=2021-11-20&finish_book=2021-11-26`)
         .then(res=> res.json());
     
     return{

@@ -89,8 +89,10 @@ function transaksi() {
   return (
     <div className="px-10 mb-20">
       <h1 className="font-bold mt-16 text-2xl">Menunggu Pembayaran</h1>
-      {transaksi.map((t) => (
-        <div className="relative grid grid-cols-5 gap-4 max-w-sm min-w-[700px] bg-white shadow-2xl rounded-3xl p-8 mx-1 mb-10 cursor-pointer ">
+      { transaksi.length === 0 ? <h1 className="lg:text-lg text-sm mt-4">Tidak ada yang harus dibayar...</h1>
+      :
+      transaksi.map((t) => (
+        <div className="relative grid grid-cols-1 lg:grid-cols-5 gap-4 max-w-sm min-w-[100%] lg:min-w-[700px] bg-white shadow-2xl rounded-3xl p-8 mx-1 mb-10 cursor-pointer ">
           <div className="overflow-x-hidden col-span-2 rounded-2xl relative">
             <img
               className="rounded-2xl w-full object-cover"
@@ -127,7 +129,7 @@ function transaksi() {
         <h1>Belum ada gedung yang disewa...</h1>
       ) : (
         transaksiSuccess.map((t) => (
-          <div className="relative grid grid-cols-5 gap-4 max-w-sm min-w-[700px] bg-white shadow-2xl rounded-3xl p-8 mx-1 mb-10 cursor-pointer ">
+          <div className="relative grid grid-cols-1 lg:grid-cols-5 gap-4 max-w-sm min-w-[100%] lg:min-w-[700px] bg-white shadow-2xl rounded-3xl p-8 mx-1 mb-10 cursor-pointer ">
             <div className="overflow-x-hidden col-span-2 rounded-2xl relative">
               <img
                 className="rounded-2xl w-full object-cover"
@@ -231,7 +233,7 @@ function transaksi() {
                                 )}{" "}
                                 kepada Vendor
                               </p>
-                              <h1 className="font-2xl font-bold mt-5">
+                              <h1 className="text-4xl text-center font-bold mt-5">
                                 {" "}
                                 {action === "checkin" ? (
                                   <span> {t.Checkin_Status.checkin_code}</span>
@@ -263,7 +265,7 @@ function transaksi() {
       )}
       <h1 className="font-bold mt-16 text-2xl">Penyewaan Selesai</h1>
       {transaksiFinish.map((t) => (
-        <div className="relative grid grid-cols-5 gap-4 max-w-sm min-w-[700px] bg-white shadow-2xl rounded-3xl p-8 mx-1 mb-10 cursor-pointer ">
+        <div className="relative grid grid-cols-1 lg:grid-cols-5 gap-4 max-w-sm min-w-[100%] lg:min-w-[700px] bg-white shadow-2xl rounded-3xl p-8 mx-1 mb-10 cursor-pointer ">
           <div className="overflow-x-hidden col-span-2 rounded-2xl relative">
             <img
               className="rounded-2xl w-full object-cover"

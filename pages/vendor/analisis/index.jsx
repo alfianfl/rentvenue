@@ -82,8 +82,9 @@ function index() {
           </div>
         </div>
       </div>
-      <div className="flex justify-around">
+      <div className="flex justify-around my-20">
         <div className="w-1/2">
+      <h1 className="text-center mb-4">Analisis Grafik per tahun</h1>
           <Line
               data= {{
                 labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
@@ -112,6 +113,7 @@ function index() {
           />
         </div>
         <div className="w-1/3">
+          <h1 className="text-center mb-4">Analisis penyewaan per venue</h1>
          <Pie
               data= {{
                 labels: label,

@@ -56,6 +56,7 @@ function addVenue() {
   const [image, setImage] = useState([]);
   const [imageFile, setImageFile] = useState([]);
   const [venueData, dispatch] = useReducer(addVenueReducer, initialState);
+  const [loading, setLoading] = useState(false);
 
   const [geoLocation, setGeoLocation] = useState({
     lat:"",
@@ -131,6 +132,7 @@ function addVenue() {
   };
 
   const handleSubmitVenue = () => {
+    setLoading(true);
     const data = new FormData();
     data.append("name", venueData.namaGedung);
     data.append("description", venueData.deskripsi);
@@ -147,21 +149,10 @@ function addVenue() {
     data.append("ktp", venueData.ktp);
     data.append("surat_tanah", venueData.suratTanah);
 
-    // console.log("name : " + venueData.namaGedung);
-    // console.log("description : "+ venueData.deskripsi);
-    // console.log("city : "+ venueData.kota);
-    // console.log("address : "+ venueData.alamat);
-    // console.log("capacity : "+ venueData.kapasitas);
-    // console.log("latitude : "+ geoLocation.lat);
-    // console.log("longitude : "+ geoLocation.long);
-    // console.log("venue_photos : "+ imageFile);
-    // console.log("ktp : " + venueData.ktp);
-    // console.log("surat_tanah  : " + venueData.suratTanah);
-    
-
     addVenueAPI(data)
       .then(res=>{
         if(res.statusText === "Created"){
+          setLoading(false);
           router.push({
             pathname:'/vendor/venue'
           })
@@ -169,6 +160,8 @@ function addVenue() {
         console.log(res.statusText);
       })
       .catch(err => {
+        setLoading(false);
+        alert(err);
         console.log(err);
       });
   }
@@ -404,12 +397,13 @@ function addVenue() {
         </div>
         <div className="flex items-center justify-end">
           <button
-            className="bg-blue-500 font-xs hover:bg-blue-700 text-white rounded-2xl  py-2 px-3 justify-around flex focus:outline-none focus:shadow-outline"
+            className={` font-xs  ${loading ? `cursor-wait bg-red-500` : `cursor-pointer bg-blue-500 hover:bg-blue-700`} text-white rounded-2xl  py-2 px-3 justify-around flex focus:outline-none focus:shadow-outline`}
             type="button"
             style={{ fontSize: "16px" }}
             onClick={handleSubmitVenue}
+            disabled={loading ? true : false}
           >
-            <SaveIcon className="h-7 bg-blue-800 text-white rounded-full p-1 cursor-pointer mr-3" />{" "}
+            <SaveIcon className="h-7 ${loading ? `cursor-wait bg-red-500` : `cursor-pointer bg-blue-800`} text-white rounded-full p-1 cursor-pointer mr-3" />{" "}
             Simpan
           </button>
         </div>

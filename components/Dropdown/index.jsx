@@ -18,7 +18,7 @@ function classNames(...classes) {
 const navMenu = [
     {  
         href: "/tenant/listVenue",
-        title: "list venue",
+        title: "List Venue",
     },
     {
       href: "/tenant/profile/persolnalInformation",

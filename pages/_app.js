@@ -8,6 +8,8 @@ import Router from 'next/router';
 
 import { Provider } from "react-redux";
 import store from "../redux/store";
+import { useState } from 'react';
+import Loading from "../components/Loading";
 
 
 const progress = new ProgressBar({
@@ -17,20 +19,33 @@ const progress = new ProgressBar({
   delay:100
 })
 
-Router.events.on('routeChangeStart', progress.start);
-Router.events.on('routeChangeComplete', progress.finish);
-Router.events.on('routeChangeError', progress.finish);
-
 function MyApp({ Component, pageProps }) {
+  const [loading, setLoading] = useState(false);
+
+  Router.events.on('routeChangeStart', (url)=>{
+    setLoading(true)
+    progress.start()
+  });
+  Router.events.on('routeChangeComplete', (url)=>{
+    setLoading(false)
+    progress.finish()
+  });
+  Router.events.on('routeChangeError', (url)=>{
+    setLoading(false)
+    progress.finish()
+  });
 
   const Layout = Component.Layout || Tenant ;
   return (
     <div className="app">
+      {
+        loading ? <Loading /> :
       <Provider store={store}>
         <Layout>
           <Component {...pageProps} />
         </Layout>
       </Provider>
+      }
     </div>
   )
 }

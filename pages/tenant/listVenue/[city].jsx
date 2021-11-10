@@ -1,25 +1,34 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-
-import { useDispatch, useSelector } from "react-redux";
-
-import { fetchUserVenue } from "../../../redux";
+import { useRouter } from "next/router";
+import { getVenueCityAPI } from "../../../services/VenueApi";
 
 const item = [{}, {}, {}, {}, {}, {}, {}, {}];
 
 const initialFilter = ["Semua kategori", "Termahal", "Termurah"];
-function index() {
+function detailCity() {
   const [openTab, setOpenTab] = React.useState(1);
-  const color = "blue";
+  const [venueData, setVenueData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const venueData = useSelector((state) => state.userVenue);
-  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const { city } = router.query;
 
   useEffect(() => {
-    dispatch(fetchUserVenue());
-  }, [dispatch]);
+    setLoading(true);
+    getVenueCityAPI(city)
+      .then((res) => {
+        console.log(res.data.data);
+        setVenueData(res.data.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  }, []);
 
-  console.log(venueData);
   return (
     <>
       <div className="flex flex-wrap px-10 lg:px-20 pt-10 pb-20">
@@ -56,7 +65,7 @@ function index() {
           </ul>
         </div>
         <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
-          {venueData.loading
+          {loading
             ? item.map((x) => (
                 <div className="bg-gray-100 w-full p-8 flex flex-wrap mt-5">
                   <div className="w-full">
@@ -86,7 +95,7 @@ function index() {
                   </div>
                 </div>
               ))
-            : venueData.venue.map((venue) => (
+            : venueData.map((venue) => (
                 <div className="relative w-full h-[400px] lg:h-90 bg-white shadow-2xl rounded-3xl p-8 mx-2 my-3 cursor-pointer ">
                   <div className="overflow-x-hidden rounded-2xl relative">
                     <img
@@ -118,4 +127,4 @@ function index() {
   );
 }
 
-export default index;
+export default detailCity;

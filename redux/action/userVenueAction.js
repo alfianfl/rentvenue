@@ -2,7 +2,7 @@ import {getAllVenueAPI } from "../../services/VenueApi";
 export const fetchUserVenue = (id) => {
   return (dispatch) => {
     dispatch(fetchUserVenueRequest());
-    getAllVenueAPI()
+    getAllVenueAPI(id)
     .then((response) => {
         const venue = response.data.data;
         dispatch(fetchUserVenueSuccess(venue));
