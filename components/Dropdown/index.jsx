@@ -34,7 +34,7 @@ export default function Dropdown({childern}) {
     const logoutHandler = () =>{
         Cookies.remove("jwt", { path: "" });
         router.push({
-            pathname: "/tenant/login"
+            pathname: "/"
         })
     }
   return (
