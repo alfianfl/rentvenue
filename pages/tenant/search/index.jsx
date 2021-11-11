@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { useRouter } from 'next/dist/client/router';
 import dummy from "../../../assets/dummy.jpg";
 
+import moment from "moment";
 function search({searchResult}) {
     const router = useRouter();
     const {location, startDate, endDate, noOfGuests} = router.query;
@@ -38,7 +39,7 @@ function search({searchResult}) {
                                 <InfoCard 
                                     id={item.id}
                                     key={item.id}
-                                    img={dummy}
+                                    img={item.Venue_Photos[0].url}
                                     description={item.description}
                                     title={item.name}
                                     price={item.price}
@@ -60,9 +61,15 @@ function search({searchResult}) {
 }
 
 export async function getServerSideProps({ query }){
-
+    
     const {location, startDate, endDate, noOfGuests} = query; 
-    const searchResult = await fetch(`https://rentavenue-backend.herokuapp.com/api/venue/search?city=${location}&capacity=${noOfGuests}&start_book=2021-11-20&finish_book=2021-11-26`)
+    const startBook = moment(startDate);
+    const endBook = moment(endDate);
+
+    startBook.format("YYYY-MM-DD");
+    endBook.format("YYYY-MM-DD");
+
+    const searchResult = await fetch(`https://rentavenue-backend.herokuapp.com/api/venue/search?city=${location}&capacity=${noOfGuests}&start_book=${startBook}&finish_book=${endBook}`)
         .then(res=> res.json());
     
     return{

@@ -48,3 +48,9 @@ export const getVenueCityFilterAPI = (payload) => {
   return API.post(`/venue/search/city`, payload);
 };
 
+export const getDateVenue = (id) => {
+  return API.get(`/venue/${id}/date`);
+};
+
+
+

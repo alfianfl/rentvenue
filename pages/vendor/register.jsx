@@ -5,8 +5,8 @@ import EmptyLayout from "../../components/Layout/EmptyLayout";
 import { useRouter } from "next/dist/client/router";
 import { registerVendorAPI } from "../../services/AuthAPI";
 import { ModalVerification } from "../../components/Modal";
-
 import Link from "next/link";
+import swal from "sweetalert";
 
 const initialState = {
   email: "",
@@ -80,12 +80,13 @@ function register() {
       })
       .catch((err) => {
         console.log(err);
+        swal("Harap isi semua data!")
         setDisabled(false);
       });
   };
   return (
     <div className="login-rent">
-      <ModalVerification isOpen={modalVerif} path="vendor"/>
+      <ModalVerification isOpen={modalVerif} path="/vendor/login"/>
       <div>
         <div
           className="container absolute  px-5 sm:px-10 lg:px-20"

@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import NumberFormat from 'react-number-format';
 
 function VenueVendorCard({data}) {
   console.log(data);
@@ -17,7 +18,7 @@ function VenueVendorCard({data}) {
             {data.name}
           </p>
           <p className="text-xs text-gray-800 mt-0">{data.address}</p>
-          <p className="text-sm text-red-500">IDR {data.price}</p>
+          <p className="text-sm text-red-500"><NumberFormat value={data.price} displayType={'text'} thousandSeparator={true} prefix={' IDR '} /></p>
         </div>
       </div>
       <div className="flex justify-center">

@@ -203,7 +203,7 @@ function login() {
             atau{" "}
             <strong className="cursor-pointer">
               {" "}
-              <Link href="/tenant/login">Login sebagai tenant</Link>
+              <Link href="/">Login sebagai tenant</Link>
             </strong>{" "}
           </h1>
         </div>

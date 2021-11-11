@@ -11,7 +11,7 @@ const navMenu = [
         nama: "Venue"
     },
     {
-        href: "/vendor/transaksi",
+        href: "/vendor/transaksi/finished",
         nama: "Transaksi"
     },
     {

@@ -12,6 +12,7 @@ import {
   getVenueByCityAPI,
   getVenueCityFilterAPI,
 } from "../../services/VenueApi";
+import NumberFormat from 'react-number-format';
 
 const initialFilter = ["Jakarta", "Bandung", "Surabaya", "Cimahi", "Bekasi"];
 const item = [{}, {}, {}, {}, {}, {}, {}, {}];
@@ -158,6 +159,7 @@ function Home({ exploreData, cardData }) {
               ))
               : filterVenue.length ===0 ? <h1 className="font-2xl font-bold">Venue tidak ada...</h1> :
               filterVenue.map((venue) => (
+                <Link href={`/tenant/booking/${venue.id}`}>
                 <div className="relative w-full h-[400px] lg:h-90 bg-white shadow-2xl rounded-3xl p-8 mx-2 my-3 cursor-pointer ">
                   <div className="overflow-x-hidden rounded-2xl relative">
                     <img
@@ -173,15 +175,16 @@ function Home({ exploreData, cardData }) {
                       <p className="text-xs text-gray-800 mt-0">
                         {venue.address}
                       </p>
-                      <p className="text-sm text-red-500">IDR {venue.price}</p>
+                      <p className="text-sm text-red-500"><NumberFormat value={venue.price} displayType={'text'} thousandSeparator={true} prefix={' IDR '} /> </p>
                     </div>
                   </div>
                   <div className="flex justify-center">
                     <span className="text-sm text-blue-600 text-center">
-                      <Link href={`/tenant/booking/${venue.id}`}>Detail</Link>
+                        Detail
                     </span>
                   </div>
                 </div>
+                </Link>
               ))
             }
           </div>

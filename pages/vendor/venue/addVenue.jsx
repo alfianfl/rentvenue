@@ -9,6 +9,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import MapGL from "react-map-gl";
 import Geocoder from "react-map-gl-geocoder";
+import swal from "sweetalert";
 
 import {useRouter} from "next/router";
 
@@ -161,7 +162,7 @@ function addVenue() {
       })
       .catch(err => {
         setLoading(false);
-        alert(err);
+        swal("Harap isi semua data!");
         console.log(err);
       });
   }

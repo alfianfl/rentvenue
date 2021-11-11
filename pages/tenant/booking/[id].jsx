@@ -20,8 +20,11 @@ import { getFeedbackAPI } from "../../../services/FeedbackAPI";
 import { bookingAPI } from "../../../services/TransactionAPI";
 import { ModalBooking } from "../../../components/Modal";
 import Cookies from "js-cookie";
-
+import NumberFormat from "react-number-format";
+import { getDateVenue } from "../../../services/VenueApi";
 import moment from "moment";
+import swal from "sweetalert";
+import { useRouter } from "next/router";
 
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYWxmaWFuZmwiLCJhIjoiY2t0amQwb3oyMWFuZzJwcnRzZG90eWZkbCJ9.zn3csz72YfegBayAqOuWDA";
@@ -32,6 +35,34 @@ function booking({ venue, feedback }) {
   const [dayBook, setDayBook] = useState(1);
   const [bookToken, setBookToken] = useState(false);
   const [modalBook, setModalBook] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [dateTaken, setDateTaken] = useState([]);
+
+  console.log("start", startDate);
+
+  console.log(
+    dateTaken.map((date) => {
+      return new Date(
+        (typeof date === "string" ? new Date(date) : date).toLocaleString(
+          "en-US",
+          { timeZone: "Asia/Jakarta" }
+        )
+      );
+    })
+  );
+
+  const router = useRouter();
+  const { id } = router.query;
+  useEffect(() => {
+    getDateVenue(id)
+      .then((res) => {
+        console.log("datre", res.data.data);
+        setDateTaken(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const [viewport, setViewport] = useState({
     latitude: 37.7577,
@@ -80,6 +111,7 @@ function booking({ venue, feedback }) {
   };
 
   const bookingHandler = () => {
+    setLoading(true);
     const startBook = moment(startDate);
     const endBook = moment(endDate);
 
@@ -90,15 +122,21 @@ function booking({ venue, feedback }) {
     };
     bookingAPI(payload)
       .then((res) => {
-        console.log(res.data.redirect_url);
+        console.log(res.data);
         if (res.data.redirect_url) {
           setModalBook(true);
           setBookToken(res.data.redirect_url);
-        } else {
-          alert("tanggal sudah terisi");
+        } else if (
+          res.data.message === "Can't book days in the past and Today"
+        ) {
+          swal(res.data.message);
+        } else if (res.data.message === "Date is taken") {
+          swal(res.data.message);
         }
+        setLoading(false);
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   };
@@ -106,7 +144,13 @@ function booking({ venue, feedback }) {
   const getStar = (length) => {
     let rating = [];
     for (let i = 0; i < length; i++) {
-      rating.push(<StarIcon className="h-5 text-yellow-500" style={{fontSize:"30px"}} key={i} />);
+      rating.push(
+        <StarIcon
+          className="h-5 text-yellow-500"
+          style={{ fontSize: "30px" }}
+          key={i}
+        />
+      );
     }
     return <>{rating}</>;
   };
@@ -133,27 +177,23 @@ function booking({ venue, feedback }) {
           <span className="flex ">
             {" "}
             <StarIcon className="h-6 text-yellow-400 mr-3 " />{" "}
-            <span className="my-auto">{feedback.averageRating} ( {feedback.findFeedback.length} Ulasan)</span>{" "}
+            <span className="my-auto">
+              {feedback.averageRating} ( {feedback.findFeedback.length} Ulasan)
+            </span>{" "}
           </span>
           <span className="font-bold">{venue.address}</span>
         </div>
         <div className="mb-14">
           <SwiperBooking>
-            {
-              venue.Venue_Photos.map(img=>(
-                <SwiperSlide key={img.url}>
-                  <div className="cursor-pointer">
-                    <div className="relative h-96 w-full">
-                      <Image
-                        src={img.url}
-                        layout="fill"
-                        className="rounded-lg"
-                      />
-                    </div>
+            {venue.Venue_Photos.map((img) => (
+              <SwiperSlide key={img.url}>
+                <div className="cursor-pointer">
+                  <div className="relative h-96 w-full">
+                    <Image src={img.url} layout="fill" className="rounded-lg" />
                   </div>
-                </SwiperSlide>
-              ))
-            }
+                </div>
+              </SwiperSlide>
+            ))}
           </SwiperBooking>
         </div>
         <div className="justify-center lg:flex lg:justify-between w-full ">
@@ -166,7 +206,11 @@ function booking({ venue, feedback }) {
               </p>
               <p className="text-xs text-gray-800 mt-0 flex">
                 <StarIcon className="h-5 text-yellow-400 mr-1" />{" "}
-                <span className="my-auto"> {feedback.averageRating} ( {feedback.findFeedback.length} Ulasan)</span>
+                <span className="my-auto">
+                  {" "}
+                  {feedback.averageRating} ( {feedback.findFeedback.length}{" "}
+                  Ulasan)
+                </span>
               </p>
             </div>
             <div className="booking-date">
@@ -174,6 +218,14 @@ function booking({ venue, feedback }) {
                 <DateRangePicker
                   ranges={[selectionRange]}
                   minDate={new Date()}
+                  disabledDates={dateTaken.map((date) => {
+                    return new Date(
+                      (typeof date === "string"
+                        ? new Date(date)
+                        : date
+                      ).toLocaleString("en-US", { timeZone: "Asia/Jakarta" })
+                    );
+                  })}
                   rangeColors={["049ADA"]}
                   onChange={handleSelect}
                 />
@@ -182,24 +234,43 @@ function booking({ venue, feedback }) {
             <div className="flex justify-center">
               <span
                 onClick={bookingHandler}
-                className="text-sm text-white px-10 py-3 rounded-xl bg-blue-500 hover:bg-blue-700 text-center cursor-pointer"
+                className={`text-sm text-white px-10 py-3 rounded-xl ${
+                  loading
+                    ? `cursor-wait bg-red-500`
+                    : `cursor-pointer bg-blue-500 hover:bg-blue-700`
+                }  text-center `}
               >
                 Booking
               </span>
             </div>
             <div className="mt-4 pl-2 mb-2 flex justify-between ">
               <p className="text-sm">
-                IDR {venue.price}
+                <NumberFormat
+                  value={venue.price}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" IDR "}
+                />
                 <span className="font-bold text-black"> X {dayBook} Hari</span>
               </p>
               <p className="text-xs text-gray-800 mt-0">
-                IDR {dayBook * venue.price}
+                <NumberFormat
+                  value={dayBook * venue.price}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" IDR "}
+                />
               </p>
             </div>
             <div className="mt-4 pl-2 mb-2 flex justify-between ">
               <p className="text-lg font-bold">Total</p>
               <p className="text-lg text-gray-800 mt-0 font-bold">
-                IDR {dayBook * venue.price}
+                <NumberFormat
+                  value={dayBook * venue.price}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" IDR "}
+                />
               </p>
             </div>
           </div>
@@ -235,31 +306,42 @@ function booking({ venue, feedback }) {
 
         <div className="my-20">
           <h1 className="font-bold text-4xl">Ulasan</h1>
-          { feedback.findFeedback.length === 0 ? <h1 className="font-lg text-gray-700">Belum ada ulasan...</h1> :
-          feedback.findFeedback.map((feedback, index) => (
-            <div key={index}>
-              <div className="flex items-center m-2 mt-5 space-x-4 rounded-xl">
-                <div className="relative h-14 w-14">
-                  <Image
-                    src={
-                      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                    }
-                    layout="fill"
-                    className="rounded-lg"
-                  />
+          {feedback.findFeedback.length === 0 ? (
+            <h1 className="font-lg text-gray-700">Belum ada ulasan...</h1>
+          ) : (
+            feedback.findFeedback.map((feedback, index) => (
+              <div key={index}>
+                <div className="flex items-center m-2 mt-5 space-x-4 rounded-xl">
+                  <div className="relative h-14 w-14">
+                    <Image
+                      src={
+                        feedback.Transaction.User.profile_picture
+                          ? feedback.Transaction.User.profile_picture
+                          : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                      }
+                      layout="fill"
+                      className="rounded-lg"
+                    />
+                  </div>
+                  <div>
+                    <span className="font-bold">
+                      {feedback.Transaction.User.firstName}
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <span className="font-bold">{feedback.Transaction.User.firstName}</span>
-                </div>
-              </div>
 
-              <div className="rating">
-                {" "}
-                <p className="flex items-center my-2">{getStar(feedback.rating)}</p>
-                <p className="text-gray-400 text-sm">{feedback.feedback_content}</p>
+                <div className="rating">
+                  {" "}
+                  <p className="flex items-center my-2">
+                    {getStar(feedback.rating)}
+                  </p>
+                  <p className="text-gray-400 text-sm">
+                    {feedback.feedback_content}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
       <ModalBooking path={bookToken} isOpen={modalBook} />

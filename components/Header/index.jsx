@@ -58,7 +58,7 @@ function Headers() {
 
     return (
         <header className="sticky bg-white top-0 z-50 grid grid-cols-3 shadow-md p-5 md:px-10">
-            <div  className="relative flex items-center my-auto h-10 cursor-pointer">
+            <div  className="relative flex items-center my-auto h-14 cursor-pointer">
                 <Image 
                     onClick={() => router.push("/tenant")}
                     src={logo}

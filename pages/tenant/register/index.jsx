@@ -5,8 +5,8 @@ import EmptyLayout from "../../../components/Layout/EmptyLayout";
 import { useRouter } from "next/dist/client/router";
 import { registerAPI } from "../../../services/AuthAPI";
 import { ModalVerification } from "../../../components/Modal";
-
 import Link from "next/link";
+import swal from "sweetalert";
 
 const initialState = {
   email: "",
@@ -47,10 +47,12 @@ function register() {
   });
   const [modalVerif, setModalVerif] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
   const submitHandler = (e) => {
+    setLoading(true)
     e.preventDefault();
     const payload = {
       email: registerData.email,
@@ -74,14 +76,17 @@ function register() {
           setModalVerif(true);
         }
         setDisabled(false)
+        setLoading(false)
       })
       .catch((err) => {
+        swal("Harap isi semua data!")
         console.log(err);
+        setLoading(false)
       });
   };
   return (
     <div className="register-rent">
-      <ModalVerification path={"tenant"} isOpen={modalVerif}/>
+      <ModalVerification path={"/"} isOpen={modalVerif}/>
       <div>
         <div
           className="container absolute  px-5 sm:px-10 lg:px-20"
@@ -106,7 +111,7 @@ function register() {
             Sudah Mendaftar ?{" "}
             <strong className="cursor-pointer">
               {" "}
-              <Link href="/tenant/login"> Sign In </Link>
+              <Link href="/"> Sign In </Link>
             </strong>{" "}
           </h1>
           {alert.emailAlreadyRegist ? (
@@ -308,7 +313,7 @@ function register() {
             </div>
             <div className="flex items-center justify-between">
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white rounded-2xl font-bold py-2 px-10 focus:outline-none focus:shadow-outline"
+                className={`${loading ? `cursor-wait bg-red-500` : `cursor-pointer bg-blue-500 hover:bg-blue-700`} text-white rounded-2xl font-bold py-2 px-10 focus:outline-none focus:shadow-outline`}
                 type="button"
                 onClick={submitHandler}
               >

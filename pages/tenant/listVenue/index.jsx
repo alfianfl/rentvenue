@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 
 import { fetchUserVenue } from "../../../redux";
+import NumberFormat from 'react-number-format';
 
 const item = [{}, {}, {}, {}, {}, {}, {}, {}];
 
@@ -102,7 +103,7 @@ function index() {
                       <p className="text-xs text-gray-800 mt-0">
                         {venue.address}
                       </p>
-                      <p className="text-sm text-red-500">IDR {venue.price}</p>
+                      <p className="text-sm text-red-500"><NumberFormat value={venue.price} displayType={'text'} thousandSeparator={true} prefix={' IDR '} /></p>
                     </div>
                   </div>
                   <div className="flex justify-center">

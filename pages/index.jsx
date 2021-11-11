@@ -1,14 +1,14 @@
 import React, { useReducer, useState, useEffect } from "react";
-import Banner from "../../../components/Banner";
-import EmptyLayout from "../../../components/Layout/EmptyLayout";
-import loginBg from "../../../assets/imageLogin.png";
-import logo from "../../../assets/Logo.png";
+import Banner from "../components/Banner";
+import EmptyLayout from "../components/Layout/EmptyLayout";
+import loginBg from "../assets/imageLogin.png";
+import logo from "../assets/Logo.png";
 import Image from "next/image";
 import { useRouter } from "next/dist/client/router";
-import { loginAPI } from "../../../services/AuthAPI";
+import { loginAPI } from "../services/AuthAPI";
 import Cookies from "js-cookie";
-
 import Link from "next/link";
+import swal from "sweetalert";
 
 const initialState = {
   email: "",
@@ -33,6 +33,7 @@ function login() {
     emailNotVerified: false,
     passwordDoesntMatch:false
   });
+  const [loading, setLoading] = useState(false);
   const [token, setToken] = useState(() => {
     const cookie = Cookies.get("userId");
     return cookie ? cookie : false;
@@ -41,6 +42,7 @@ function login() {
   const router = useRouter();
 
   const submitHandler = (e) => {
+    setLoading(true)
     e.preventDefault();
 
     const payload = {
@@ -50,23 +52,29 @@ function login() {
 
     loginAPI(payload)
     .then((res) => {
+      console.log(res);
       if(res.data.message === "Please verify you email first"){
         setAlert({emailNotVerified: res.data.message});
       }else{
         if(res.data.message === "Email and password didn't match"){
           setAlert({passwordDoesntMatch:res.data.message})
-        }else{
-          setToken(res.data.data.UserId);
+        }else if(res.data.message === "Email is not registered"){
+          setAlert({emailNotVerified: res.data.message});
+        }
+        else{
           router.push({
             pathname: "/tenant",
           });
         }
       }
       setDisabled(false);
+      setLoading(false);
     })
       .catch((err) => {
         console.log(err);
         setDisabled(false);
+        setLoading(false)
+        swal("Harap isi semua data")
       });
   };
 
@@ -180,7 +188,7 @@ function login() {
             </div>
             <div className="flex items-center justify-between">
               <button
-                className="bg-blue-500 rounded-2xl hover:bg-blue-700 text-white font-bold py-2 px-10 focus:outline-none focus:shadow-outline"
+                className={`${loading ? `cursor-wait bg-red-500` : `cursor-pointer bg-blue-500 hover:bg-blue-700`} rounded-2xl text-white font-bold py-2 px-10 focus:outline-none focus:shadow-outline`}
                 type="button"
                 onClick={submitHandler}
               >
