@@ -132,6 +132,8 @@ function booking({ venue, feedback }) {
           swal(res.data.message);
         } else if (res.data.message === "Date is taken") {
           swal(res.data.message);
+        } else if (res.data.message === "Maximum booking limit is 10 days") {
+          swal(res.data.message);
         }
         setLoading(false);
       })

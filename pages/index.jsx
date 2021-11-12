@@ -75,7 +75,7 @@ function login() {
         console.log(err);
         setDisabled(false);
         setLoading(false)
-        swal("Harap isi data dengan benar")
+        swal("Data tidak ada")
       });
   };
 

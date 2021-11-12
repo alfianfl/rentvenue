@@ -23,8 +23,12 @@ const navMenu = [
     //     nama: "Feedback"
     // },
     {
-        href: "/vendor/profile/persolnalInformation",
+        href: "/vendor/profile/accountProfile",
         nama: "Profile"
+    },
+    {
+        href: "/vendor/profile/persolnalInformation",
+        nama: "Setting"
     },
     {
         href: "",
@@ -34,7 +38,7 @@ const navMenu = [
 
 function VendorLayout({children}) {
     return (
-        <div  style={{backgroundColor:"#E5E5E5", cursor:"pointer"}}>
+        <div  style={{backgroundColor:"#E5E5E5", cursor:"pointer", overflow:"hidden"}}>
             <SidebarVendor navMenu={navMenu}>
                 {children}
             </SidebarVendor>

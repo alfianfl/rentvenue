@@ -66,12 +66,6 @@ function persolnalInformation() {
       profileData[key] === "" ? null : data.append(key, profileData[key]);
       
     })
-    // data.append("password", profileData.password);
-    // data.append("lastName", profileData.lastName);
-    // data.append("firstName", profileData.firstName);
-    // data.append("phone_number", profileData.phoneNumber);
-    // data.append("gender", profileData.gender);
-    // data.append("profile_picture", image.raw);
 
     ProfileVendorAPI(vendorId, data)
       .then(res=>{

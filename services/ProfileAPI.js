@@ -12,5 +12,10 @@ export const ProfileVendorAPI = (id, payload) => {
   export const getProfileAPI = (id) => {
     return API.get(`/user/${id}`);
   };
+
+  export const getProfileVendorAPI = (id) => {
+    return API.get(`/vendor/${id}`);
+  };
+  
   
 

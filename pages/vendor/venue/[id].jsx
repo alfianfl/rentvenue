@@ -61,7 +61,7 @@ function detailVenue({ venue }) {
 
 
       <div className="title mt-10">
-        {venue.address}{" "}
+         {venue.address}{" "}
       </div>
       <div className="deskripsi-venue">
         <div className="flex w-full justify-between my-8">

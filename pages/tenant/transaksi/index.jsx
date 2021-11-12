@@ -13,10 +13,12 @@ import {
   getPendingTransactionAPI,
   getSuccessTransactionAPI,
   getFinishedTransactionAPI,
-  feedbackAPI
+  feedbackAPI,
 } from "../../../services/TransactionAPI";
 import { ModalShowCheckin } from "../../../components/Modal";
 import swal from "sweetalert";
+import { StarIcon } from "@heroicons/react/solid";
+import star from "../../../assets/star.jpg";
 
 function transaksi() {
   const userId = Cookies.get("userId");
@@ -28,7 +30,7 @@ function transaksi() {
   const [action, setAction] = useState("");
   const cancelButtonRef = useRef(null);
   const [ulasan, setUlasan] = useState("");
-  const [rating, setRating] = useState(0)
+  const [rating, setRating] = useState(0);
 
   useEffect(() => {
     getPendingTransactionAPI(userId)
@@ -64,64 +66,64 @@ function transaksi() {
   }, []);
 
   const submitHandler = (id) => {
-
     const payload = {
-      feedback_content : ulasan,
-      rating: rating
-    }
+      feedback_content: ulasan,
+      rating: rating,
+    };
 
     feedbackAPI(id, payload)
-      .then(res=>{
+      .then((res) => {
         console.log(res);
-        if(res.data.message){
-          swal(res.data.message)
-        }else{
-          swal("Feedback berhasil dikirim")
+        if (res.data.message) {
+          swal(res.data.message);
+        } else {
+          swal("Feedback berhasil dikirim");
         }
       })
-      .catch(err=>{
+      .catch((err) => {
         console.log(err);
-      })
-
-  }
+      });
+  };
 
   return (
     <div className="px-10 mb-20">
       <h1 className="font-bold mt-16 text-2xl">Menunggu Pembayaran</h1>
-      { transaksi.length === 0 ? <h1 className="lg:text-lg text-sm mt-4">Tidak ada yang harus dibayar...</h1>
-      :
-      transaksi.map((t) => (
-        <div className="relative grid grid-cols-1 lg:grid-cols-5 gap-4 max-w-sm min-w-[100%] lg:min-w-[700px] bg-white shadow-2xl rounded-3xl p-8 mx-1 mb-10 cursor-pointer ">
-          <div className="overflow-x-hidden col-span-2 rounded-2xl relative">
-            <img
-              className={t.Venue.Venue_Photos[0].url}
-            />
-          </div>
-          <div className="mt-4 pl-2 mb-2 col-span-3 flex justify-between ">
-            <div>
-              <p className="text-lg font-semibold text-gray-900 mb-0">
-                {t.Venue.name}
-              </p>
-              <p className="text-xs text-gray-800 mt-0">{t.Venue.address}</p>
-              <p className="text-sm text-red-500">IDR {t.total_payment}</p>
-
-              <div className="mt-5">
-                <p className="text-sm text-red-500 font-bold mb-3">
-                  Pembayaran berakhir pada pukul{" "}
-                  {moment(t.expiredAt).format("hh:mm:ss")}
+      {transaksi.length === 0 ? (
+        <h1 className="lg:text-lg text-sm mt-4">
+          Tidak ada yang harus dibayar...
+        </h1>
+      ) : (
+        transaksi.map((t) => (
+          <div className="relative grid grid-cols-1 lg:grid-cols-5 gap-4 max-w-sm min-w-[100%] lg:min-w-[700px] bg-white shadow-2xl rounded-3xl p-8 mx-1 mb-10 cursor-pointer ">
+            <div className="overflow-x-hidden col-span-2 rounded-2xl relative">
+              <img className={t.Venue.Venue_Photos[0].url} />
+            </div>
+            <div className="mt-4 pl-2 mb-2 col-span-3 flex justify-between ">
+              <div>
+                <p className="text-lg font-semibold text-gray-900 mb-0">
+                  {t.Venue.name}
                 </p>
-                <a
-                  href={`https://app.sandbox.midtrans.com/snap/v2/vtweb/${t.token}`}
-                >
-                  <button className="bg-blue-600 hover:bg-blue-700 px-4 py-1 text-white text-md rounded rounded-2xl">
-                    Bayar
-                  </button>
-                </a>
+                <p className="text-xs text-gray-800 mt-0">{t.Venue.address}</p>
+                <p className="text-sm text-red-500">IDR {t.total_payment}</p>
+
+                <div className="mt-5">
+                  <p className="text-sm text-red-500 font-bold mb-3">
+                    Pembayaran berakhir pada pukul{" "}
+                    {moment(t.expiredAt).format("hh:mm:ss")}
+                  </p>
+                  <a
+                    href={`https://app.sandbox.midtrans.com/snap/v2/vtweb/${t.token}`}
+                  >
+                    <button className="bg-blue-600 hover:bg-blue-700 px-4 py-1 text-white text-md rounded rounded-2xl">
+                      Bayar
+                    </button>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
       <h1 className="font-bold mt-16 text-2xl">Penyewaan Berhasil</h1>
       {!transaksiSuccess.length ? (
         <h1>Belum ada gedung yang disewa...</h1>
@@ -147,11 +149,10 @@ function transaksi() {
                   </p>
                   <div className="mt-2">
                     <button
-                      className={`${
-                        t.Checkin_Status.checkin_code !== null
+                      className={`${t.Checkin_Status.checkin_code !== null
                           ? "bg-blue-600 hover:bg-blue-700"
                           : "bg-gray-400"
-                      }   px-3 py-1 text-white text-xs rounded rounded-2xl mr-5`}
+                        }   px-3 py-1 text-white text-xs rounded rounded-2xl mr-5`}
                       disabled={
                         t.Checkin_Status.checkin_code === null ? true : false
                       }
@@ -163,11 +164,10 @@ function transaksi() {
                       Check-in
                     </button>
                     <button
-                      className={`${
-                        t.Checkin_Status.checkin_code === null
+                      className={`${t.Checkin_Status.checkin_code === null
                           ? "bg-blue-600 hover:bg-blue-700"
                           : "bg-gray-400"
-                      }   px-3 py-1 text-white text-xs rounded rounded-2xl`}
+                        }   px-3 py-1 text-white text-xs rounded rounded-2xl`}
                       disabled={
                         t.Checkin_Status.checkin_code !== null ? true : false
                       }
@@ -291,9 +291,7 @@ function transaksi() {
                     id="username"
                     type="text"
                     placeholder="Masukan komentar"
-                    onChange={(e) =>
-                      setUlasan(e.target.value)
-                    }
+                    onChange={(e) => setUlasan(e.target.value)}
                   />
                 </div>
                 <div className="my-4">
@@ -301,26 +299,35 @@ function transaksi() {
                     className="block text-gray-700 text-sm font-light mb-2"
                     htmlFor="username"
                   >
-                    Masukan rating 1/5
+                    Masukan rating 
                   </label>
-                  <input
-                    className="shadow appearance-none border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="username"
-                    type="number"
-                    placeholder="1 - 5"
-                    onChange={(e) =>
-                      setRating(e.target.value)
-                    }
-                  />
+                  <div className="inline-block relative w-64">
+                    <select onChange={(e) => setRating(e.target.value)} className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                      <option value={1}>⭐</option>
+                      <option value={2}>⭐⭐</option>
+                      <option value={3}>⭐⭐⭐</option>
+                      <option value={4}>⭐⭐⭐⭐</option>
+                      <option value={5}>⭐⭐⭐⭐⭐</option>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg
+                        className="fill-current h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
-                <a
-                  href="#"
-                >
-                  <button onClick={() => submitHandler(t.id)} className="bg-blue-600 hover:bg-blue-700 px-4 py-1 text-white text-md rounded rounded-2xl">
+                <a href="#">
+                  <button
+                    onClick={() => submitHandler(t.id)}
+                    className="bg-blue-600 hover:bg-blue-700 px-4 py-1 text-white text-md rounded rounded-2xl"
+                  >
                     Kirim
                   </button>
                 </a>
-                
               </div>
             </div>
           </div>
