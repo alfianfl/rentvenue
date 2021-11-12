@@ -3,6 +3,7 @@ import logo from "../../assets/Logo.png";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import swal from "sweetalert";
 
 function SideBarVendor({ navMenu, children }) {
   const router = useRouter();

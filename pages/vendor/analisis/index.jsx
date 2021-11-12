@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import VendorLayout from "../../../components/Layout/VendorLayout";
 import people from "../../../assets/people.png";
 import like from "../../../assets/like.png";
+import dolar from "../../../assets/dolar.png";
 import swal from "sweetalert";
 import Image from "next/image";
 import { Line, Pie } from "react-chartjs-2";
@@ -39,7 +40,7 @@ function index() {
   });
 
   const label = dataTransaction.map((item) => {
-    return parseInt(item.VenueId, 10);
+    return parseInt(item.Venue.name, 10);
   });
 
   return (
@@ -60,8 +61,15 @@ function index() {
       </div>
       <div className="mt-10 min-w-0 break-words w-full mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 ">
         <div className="relative flex max-w-sm w-[260px] bg-white shadow-2xl rounded-3xl p-4 mx-1 my-3 cursor-pointer ">
-          <div className="overflow-x-hidden rounded-2xl relative">
-            <img className="h-20 rounded-2xl w-full object-cover" src="" />
+        <div className="overflow-x-hidden rounded-2xl relative">
+            <div className="relative h-20 w-16 flex-shrink-0">
+              <Image
+                src={dolar}
+                layout="fill"
+                objectFit="cover"
+                className="rounded-2xl"
+              />
+            </div>
           </div>
           <div className="mt-4 pl-2 mb-2 ">
             <p className="text-sm font-bold">Total Pemasukan </p>

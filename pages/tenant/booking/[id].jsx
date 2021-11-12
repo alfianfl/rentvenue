@@ -14,7 +14,7 @@ import MapGL from "react-map-gl";
 import Geocoder from "react-map-gl-geocoder";
 
 import { StarIcon } from "@heroicons/react/solid";
-
+import FloatingWhatsApp from 'react-floating-whatsapp'
 import { getDetailVenueAPI } from "../../../services/VenueApi";
 import { getFeedbackAPI } from "../../../services/FeedbackAPI";
 import { bookingAPI } from "../../../services/TransactionAPI";
@@ -38,18 +38,18 @@ function booking({ venue, feedback }) {
   const [loading, setLoading] = useState(false);
   const [dateTaken, setDateTaken] = useState([]);
 
-  console.log("start", startDate);
+  console.log(venue);
 
-  console.log(
-    dateTaken.map((date) => {
-      return new Date(
-        (typeof date === "string" ? new Date(date) : date).toLocaleString(
-          "en-US",
-          { timeZone: "Asia/Jakarta" }
-        )
-      );
-    })
-  );
+  // console.log(
+  //   dateTaken.map((date) => {
+  //     return new Date(
+  //       (typeof date === "string" ? new Date(date) : date).toLocaleString(
+  //         "en-US",
+  //         { timeZone: "Asia/Jakarta" }
+  //       )
+  //     );
+  //   })
+  // );
 
   const router = useRouter();
   const { id } = router.query;
@@ -201,8 +201,13 @@ function booking({ venue, feedback }) {
           <div className="relative ml-0 lg:ml-20 max-w-sm w-[100%] lg:w-[350px] bg-white shadow-2xl rounded-3xl p-8 mb-3 cursor-pointer ">
             <div className="mt-4 pl-2 mb-2 flex justify-between ">
               <p className="text-sm text-red-500">
-                IDR {venue.price}{" "}
-                <span className="font-bold text-black">/hari</span>
+                  <NumberFormat
+                  value={venue.price}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" IDR "}
+                />
+                <span className="font-bold text-black"> /hari </span>
               </p>
               <p className="text-xs text-gray-800 mt-0 flex">
                 <StarIcon className="h-5 text-yellow-400 mr-1" />{" "}
@@ -310,34 +315,36 @@ function booking({ venue, feedback }) {
             <h1 className="font-lg text-gray-700">Belum ada ulasan...</h1>
           ) : (
             feedback.findFeedback.map((feedback, index) => (
-              <div key={index}>
-                <div className="flex items-center m-2 mt-5 space-x-4 rounded-xl">
-                  <div className="relative h-14 w-14">
-                    <Image
-                      src={
-                        feedback.Transaction.User.profile_picture
-                          ? feedback.Transaction.User.profile_picture
-                          : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                      }
-                      layout="fill"
-                      className="rounded-lg"
-                    />
+              <div className="relative grid grid-cols-1 lg:grid-cols-5 gap-4 max-w-sm min-w-[100%] lg:min-w-[700px] bg-white shadow-2xl rounded-3xl p-8 mx-1 mb-10 cursor-pointer ">
+                <div key={index} className="w-[500px]">
+                  <div className="flex items-center m-2 mt-5 space-x-4 rounded-xl">
+                    <div className="relative h-14 w-14">
+                      <Image
+                        src={
+                          feedback.Transaction.User.profile_picture
+                            ? feedback.Transaction.User.profile_picture
+                            : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        }
+                        layout="fill"
+                        className="rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <span className="font-bold">
+                        {feedback.Transaction.User.firstName}
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="font-bold">
-                      {feedback.Transaction.User.firstName}
-                    </span>
-                  </div>
-                </div>
 
-                <div className="rating">
-                  {" "}
-                  <p className="flex items-center my-2">
-                    {getStar(feedback.rating)}
-                  </p>
-                  <p className="text-gray-400 text-sm">
-                    {feedback.feedback_content}
-                  </p>
+                  <div className="rating">
+                    {" "}
+                    <p className="flex items-center my-2">
+                      {getStar(feedback.rating)}
+                    </p>
+                    <p className="text-gray-400 text-sm">
+                      {feedback.feedback_content}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))
@@ -345,6 +352,10 @@ function booking({ venue, feedback }) {
         </div>
       </div>
       <ModalBooking path={bookToken} isOpen={modalBook} />
+      {/* <FloatingWhatsApp
+        phoneNumber={"089524013023"}
+        zIndex="zIndex"
+      /> */}
     </div>
   );
 }
