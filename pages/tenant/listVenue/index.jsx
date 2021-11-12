@@ -22,7 +22,7 @@ function index() {
 
   console.log(venueData);
   return (
-    <>
+    <Link href={`/tenant/booking/${venue.id}`}>
       <div className="flex flex-wrap px-10 lg:px-20 pt-10 pb-20">
         <div className="w-1/8">
           <ul
@@ -108,14 +108,14 @@ function index() {
                   </div>
                   <div className="flex justify-center">
                     <span className="text-sm text-blue-600 text-center">
-                      <Link href={`/tenant/booking/${venue.id}`}>Detail</Link>
+                      Detail
                     </span>
                   </div>
                 </div>
               ))}
         </div>
       </div>
-    </>
+      </Link>
   );
 }
 
