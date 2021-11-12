@@ -62,6 +62,7 @@ function login() {
           setAlert({emailNotVerified: res.data.message});
         }
         else{
+          setToken(res.data.data.UserId);
           router.push({
             pathname: "/tenant",
           });
