@@ -40,7 +40,7 @@ function index() {
   });
 
   const label = dataTransaction.map((item) => {
-    return parseInt(item.Venue.name, 10);
+    return item.Venue.name;
   });
 
   return (
@@ -61,7 +61,7 @@ function index() {
       </div>
       <div className="mt-10 min-w-0 break-words w-full mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 ">
         <div className="relative flex max-w-sm w-[260px] bg-white shadow-2xl rounded-3xl p-4 mx-1 my-3 cursor-pointer ">
-        <div className="overflow-x-hidden rounded-2xl relative">
+          <div className="overflow-x-hidden rounded-2xl relative">
             <div className="relative h-20 w-16 flex-shrink-0">
               <Image
                 src={dolar}
@@ -73,7 +73,15 @@ function index() {
           </div>
           <div className="mt-4 pl-2 mb-2 ">
             <p className="text-sm font-bold">Total Pemasukan </p>
-            <p className="text-sm font-bold">IDR {dataAnalitik.totalIncome} </p>
+            <p className="text-sm font-bold">
+              {" "}
+              <NumberFormat
+                value={dataAnalitik.totalIncome}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" IDR "}
+              />{" "}
+            </p>
           </div>
         </div>
         <div className="relative flex max-w-sm w-[260px] bg-white shadow-2xl rounded-3xl p-4 mx-1 my-3 cursor-pointer ">
