@@ -84,14 +84,19 @@ function editVenue() {
 
     editVenueAPI(id, data)
       .then(res=>{
-        swal("Poof! Your venue has been updated!", {
-          icon: "success",
-        });
-        router.push(
-          {
-            pathname: '/vendor/venue'
-          }
-        )
+        console.log(res);
+        if(res.data.message === "Max photo reached (5)"){
+          swal(res.data.message);
+        }else{
+          swal("Poof! Your venue has been updated!", {
+            icon: "success",
+          });
+          router.push(
+            {
+              pathname: '/vendor/venue'
+            }
+          )
+        }
       })
       .catch(err => {
         setLoading(false);
