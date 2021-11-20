@@ -194,7 +194,7 @@ function persolnalInformation() {
                 className="shadow appearance-none text-sm border border-grey-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="vendorName"
                 type="text"
-                value={profileData.address}
+                value={profileData.description}
                 onChange={(e) =>
                   setProfileData({
                     ...profileData,
