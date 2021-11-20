@@ -68,6 +68,7 @@ function transaksi() {
     setLoading(true);
     getCodeForCheck(userId, idTransaksi)
       .then((res) => {
+        console.log( "checkoutcode", res.data.data.checkout_code);
         setCheckIn({
           checkin_code: res.data.data.checkin_code,
           checkout_code: res.data.data.checkout_code,
@@ -372,4 +373,4 @@ function transaksi() {
   );
 }
 
-export default transaksi;
+export default withUtils(transaksi);

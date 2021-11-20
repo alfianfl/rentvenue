@@ -1,45 +1,24 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { Sidebar } from "../../../components/Sidebar";
 import Image from "next/image";
 import { CameraIcon } from "@heroicons/react/solid";
-import { ProfileAPI } from "../../../services/ProfileAPI";
+import { ProfileAPI, getProfileAPI } from "../../../services/ProfileAPI";
 import Cookies from "js-cookie";
 import swal from "sweetalert";
 import withUtils from "../../../utils/withUtils";
 import { useRouter } from "next/router";
 
-
-const initialState = {
-  firstName: "",
-  lastName: "",
-  gender: "",
-  phone_number: "",
-  password: "",
-  profile_picture:""
-};
-
-const profileReducer = (currentState, action) => {
-  switch (action.type) {
-    case "PASSWORD":
-      return { ...currentState, password: action.payload };
-    case "FIRST_NAME":
-      return { ...currentState, firstName: action.payload };
-    case "LAST_NAME":
-      return { ...currentState, lastName: action.payload };
-    case "GENDER":
-      return { ...currentState, gender: action.payload };
-    case "PHONE_NUMBER":
-      return { ...currentState, phone_number: action.payload };
-    case "RAW":
-      return { ...currentState, profile_picture: action.payload };
-    default:
-      return currentState;
-  }
-};
-
 function persolnalInformation() {
   const [image, setImage] = useState({ preview: false, raw: undefined });
-  const [profileData, dispatch] = useReducer(profileReducer, initialState);
+  const [profileById, setProfileById] = useState({});
+  const [profileData, setProfileData] = useState({
+    firstName: "",
+    lastName: "",
+    gender: "",
+    phone_number: "",
+    password: "",
+    profile_picture: "",
+  });
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -49,46 +28,50 @@ function persolnalInformation() {
         preview: URL.createObjectURL(e.target.files[0]),
       });
 
-      dispatch({ type: "RAW", payload: e.target.files[0] })
-
+      dispatch({ type: "RAW", payload: e.target.files[0] });
     }
   };
 
+  useEffect(() => {
+    getProfileAPI(userId)
+      .then((res) => {
+        setProfileById(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
+  useEffect(() => {
+    setProfileData(profileById);
+  }, [profileById]);
   const userId = Cookies.get("userId");
 
   const sumbmitHandler = () => {
     setLoading(true);
     const data = new FormData();
 
-    Object.keys(initialState).map(key => {
+    Object.keys(profileData).map((key) => {
       profileData[key] === "" ? null : data.append(key, profileData[key]);
-      
-    })
-    // data.append("password", profileData.password);
-    // data.append("lastName", profileData.lastName);
-    // data.append("firstName", profileData.firstName);
-    // data.append("phone_number", profileData.phoneNumber);
-    // data.append("gender", profileData.gender);
-    // data.append("profile_picture", image.raw);
+    });
 
     ProfileAPI(userId, data)
-      .then(res=>{
+      .then((res) => {
         console.log(res.data.message);
-        if(res.data.message === "Wrong Password!"){
-          swal(res.data.message)
-        } else if( res.data.message === "Please enter the password"){
-          swal(res.data.message)
-        } else{
-          window.location.href = "/tenant/profile/accountProfile"
+        if (res.data.message === "Wrong Password!") {
+          swal(res.data.message);
+        } else if (res.data.message === "Please enter the password") {
+          swal(res.data.message);
+        } else {
+          window.location.href = "/tenant/profile/accountProfile";
         }
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         setLoading(false);
       });
-  }
+  };
 
   return (
     <div className="tenant-personal-information grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 px-5 lg:px-20 my-10 llg:my-20">
@@ -134,15 +117,19 @@ function persolnalInformation() {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-first-name"
                 >
-                  First Name* 
+                  First Name*
                 </label>
                 <input
                   className="shadow appearance-none border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="grid-first-name"
                   type="text"
                   placeholder="Jane"
+                  value={profileData.firstName}
                   onChange={(e) =>
-                    dispatch({ type: "FIRST_NAME", payload: e.target.value })
+                    setProfileData({
+                      ...profileData,
+                      firstName: e.target.value,
+                    })
                   }
                 />
                 {/* <p className="text-red-500 text-xs italic">
@@ -160,8 +147,12 @@ function persolnalInformation() {
                   className="shadow appearance-none border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="grid-last-name"
                   type="text"
+                  value={profileData.lastName}
                   onChange={(e) =>
-                    dispatch({ type: "LAST_NAME", payload: e.target.value })
+                    setProfileData({
+                      ...profileData,
+                      lastName: e.target.value,
+                    })
                   }
                   placeholder="Doe"
                 />
@@ -181,7 +172,10 @@ function persolnalInformation() {
                     id="featured-1"
                     name="featured"
                     onChange={(e) =>
-                      dispatch({ type: "GENDER", payload: "laki-laki" })
+                      setProfileData({
+                        ...profileData,
+                        gender: "laki-laki",
+                      })
                     }
                   />
                   <label htmlFor="featured-1">Laki-laki</label>
@@ -193,7 +187,10 @@ function persolnalInformation() {
                     id="featured-2"
                     name="featured"
                     onChange={(e) =>
-                      dispatch({ type: "GENDER", payload: "perempuan" })
+                      setProfileData({
+                        ...profileData,
+                        gender: "perempuan",
+                      })
                     }
                   />
                   <label htmlFor="featured-2">Perempuan</label>
@@ -211,8 +208,12 @@ function persolnalInformation() {
                 className="shadow appearance-none border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="phone number"
                 type="text"
+                value={profileData.phone_number}
                 onChange={(e) =>
-                  dispatch({ type: "PHONE_NUMBER", payload: e.target.value })
+                  setProfileData({
+                    ...profileData,
+                    phone_number: e.target.value,
+                  })
                 }
                 placeholder="Phone number"
               />
@@ -229,7 +230,10 @@ function persolnalInformation() {
                 id="confirm-password"
                 type="password"
                 onChange={(e) =>
-                  dispatch({ type: "PASSWORD", payload: e.target.value })
+                  setProfileData({
+                    ...profileData,
+                    password: e.target.value,
+                  })
                 }
                 placeholder="******************"
               />
@@ -250,7 +254,11 @@ function persolnalInformation() {
                 Back to Home
               </button>
               <button
-                className={`button-update-profile ${loading ? `cursor-wait bg-red-500` : `cursor-pointer bg-blue-500 hover:bg-blue-700`} rounded-2xl text-white font-bold py-2 px-5 focus:outline-none focus:shadow-outline`}
+                className={`button-update-profile ${
+                  loading
+                    ? `cursor-wait bg-red-500`
+                    : `cursor-pointer bg-blue-500 hover:bg-blue-700`
+                } rounded-2xl text-white font-bold py-2 px-5 focus:outline-none focus:shadow-outline`}
                 type="button"
                 onClick={sumbmitHandler}
                 disabled={loading ? true : false}

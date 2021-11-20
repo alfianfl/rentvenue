@@ -1,46 +1,56 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { Sidebar } from "../../../components/Sidebar";
 import Image from "next/image";
 import { CameraIcon } from "@heroicons/react/solid";
-import { ProfileVendorAPI } from "../../../services/ProfileAPI";
+import {
+  ProfileVendorAPI,
+  getProfileVendorAPI,
+} from "../../../services/ProfileAPI";
 import Cookies from "js-cookie";
 import swal from "sweetalert";
 import withUtils from "../../../utils/withUtilsVendor";
 import VendorLayout from "../../../components/Layout/VendorLayout";
 import Link from "next/link";
 
+// const initialState = {
+//   vendor_name: "",
+//   description: "",
+//   address: "",
+//   phone_number: "",
+//   password: "",
+//   profile_picture:"",
+// };
 
-const initialState = {
-  vendor_name: "",
-  description: "",
-  address: "",
-  phone_number: "",
-  password: "",
-  profile_picture:"",
-};
-
-const profileReducer = (currentState, action) => {
-  switch (action.type) {
-    case "PASSWORD":
-      return { ...currentState, password: action.payload };
-    case "VENDOR_NAME":
-      return { ...currentState, vendor_name: action.payload };
-    case "DESCRIPTION":
-      return { ...currentState, description: action.payload };
-    case "ADDRESS":
-      return { ...currentState, address: action.payload };
-    case "PHONE_NUMBER":
-      return { ...currentState, phone_number: action.payload };
-    case "RAW":
-      return { ...currentState, profile_picture: action.payload };
-    default:
-      return currentState;
-  }
-};
+// const profileReducer = (currentState, action) => {
+//   switch (action.type) {
+//     case "PASSWORD":
+//       return { ...currentState, password: action.payload };
+//     case "VENDOR_NAME":
+//       return { ...currentState, vendor_name: action.payload };
+//     case "DESCRIPTION":
+//       return { ...currentState, description: action.payload };
+//     case "ADDRESS":
+//       return { ...currentState, address: action.payload };
+//     case "PHONE_NUMBER":
+//       return { ...currentState, phone_number: action.payload };
+//     case "RAW":
+//       return { ...currentState, profile_picture: action.payload };
+//     default:
+//       return currentState;
+//   }
+// };
 
 function persolnalInformation() {
   const [image, setImage] = useState({ preview: false, raw: undefined });
-  const [profileData, dispatch] = useReducer(profileReducer, initialState);
+  const [profileById, setProfileById] = useState({});
+  const [profileData, setProfileData] = useState({
+    vendor_name:"",
+    description: "",
+    address: "",
+    phone_number: "",
+    password: "",
+    profile_picture: ""
+  });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -49,41 +59,52 @@ function persolnalInformation() {
         preview: URL.createObjectURL(e.target.files[0]),
       });
 
-      dispatch({ type: "RAW", payload: e.target.files[0] })
-
+      dispatch({ type: "RAW", payload: e.target.files[0] });
     }
   };
 
-
   const vendorId = Cookies.get("vendorId");
 
-  const sumbmitHandler = () => {
+  useEffect(() => {
+    setProfileData(profileById);
+  }, [profileById])
 
+  useEffect(() => {
+    getProfileVendorAPI(vendorId)
+      .then((res) => {
+        console.log(res);
+        setProfileById(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const sumbmitHandler = () => {
     setLoading(true);
     const data = new FormData();
 
-    Object.keys(initialState).map(key => {
+    Object.keys(profileData).map((key) => {
       profileData[key] === "" ? null : data.append(key, profileData[key]);
-      
-    })
+    });
 
     ProfileVendorAPI(vendorId, data)
-      .then(res=>{
+      .then((res) => {
         console.log(res.data.message);
 
-        if(res.data.message === "Wrong Password!"){
+        if (res.data.message === "Wrong Password!") {
           setLoading(false);
-          alert(res.data.message)
-        } else{
+          alert(res.data.message);
+        } else {
           setLoading(false);
           swal(res.data.message);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         setLoading(false);
         console.log(err);
       });
-  }
+  };
 
   return (
     <div className="tenant-personal-information w-full">
@@ -133,8 +154,12 @@ function persolnalInformation() {
                 className="shadow text-sm appearance-none border border-grey-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="vendorName"
                 type="text"
+                value={profileData.vendor_name}
                 onChange={(e) =>
-                  dispatch({ type: "VENDOR_NAME", payload: e.target.value })
+                  setProfileData({
+                    ...profileData,
+                    vendor_name: e.target.value,
+                  })
                 }
               />
             </div>
@@ -149,8 +174,12 @@ function persolnalInformation() {
                 className="shadow appearance-none text-sm border border-grey-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="vendorName"
                 type="text"
+                value={profileData.address}
                 onChange={(e) =>
-                  dispatch({ type: "ADDRESS", payload: e.target.value })
+                  setProfileData({
+                    ...profileData,
+                    address: e.target.value,
+                  })
                 }
               />
             </div>
@@ -159,14 +188,18 @@ function persolnalInformation() {
                 className="block text-gray-700 text-sm font-light mb-2"
                 htmlFor="username"
               >
-               Description
+                Description
               </label>
               <input
                 className="shadow appearance-none text-sm border border-grey-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="vendorName"
                 type="text"
+                value={profileData.address}
                 onChange={(e) =>
-                  dispatch({ type: "DESCRIPTION", payload: e.target.value })
+                  setProfileData({
+                    ...profileData,
+                    description: e.target.value,
+                  })
                 }
               />
             </div>
@@ -181,8 +214,12 @@ function persolnalInformation() {
                 className="shadow appearance-none text-sm border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="phone number"
                 type="number"
+                value={profileData.phone_number}
                 onChange={(e) =>
-                  dispatch({ type: "PHONE_NUMBER", payload: e.target.value })
+                  setProfileData({
+                    ...profileData,
+                    phone_number: e.target.value,
+                  })
                 }
                 placeholder="Phone number"
               />
@@ -199,7 +236,10 @@ function persolnalInformation() {
                 id="confirm-password"
                 type="password"
                 onChange={(e) =>
-                  dispatch({ type: "PASSWORD", payload: e.target.value })
+                  setProfileData({
+                    ...profileData,
+                    password: e.target.value,
+                  })
                 }
                 placeholder="******************"
               />
@@ -213,7 +253,9 @@ function persolnalInformation() {
           <div className="flex items-center justify-end">
             <div>
               <button
-                className={`button-update-profile rounded-2xl text-lg text-white font-bold py-2 px-5 ${loading ? `cursor-wait bg-red-500` : `cursor-pointer`} focus:outline-none focus:shadow-outline`}
+                className={`button-update-profile rounded-2xl text-lg text-white font-bold py-2 px-5 ${
+                  loading ? `cursor-wait bg-red-500` : `cursor-pointer`
+                } focus:outline-none focus:shadow-outline`}
                 type="button"
                 onClick={sumbmitHandler}
               >

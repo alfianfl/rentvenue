@@ -228,4 +228,4 @@ export async function getStaticProps() {
   };
 }
 
-export default Home;
+export default withUtils(Home);

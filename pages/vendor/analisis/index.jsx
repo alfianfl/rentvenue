@@ -58,10 +58,8 @@ function index() {
   });
 
   const month = dataPerMonth.map((item) => {
-    const monthP = moment(item.month);
-    monthP.format('L')
 
-    return monthP;
+    return  moment(item.month).format('MMM-YYYY')
   });
 
   return (
@@ -142,13 +140,13 @@ function index() {
       </div>
       <div className="flex justify-around my-20">
         <div className="w-1/2">
-          <h1 className="text-center mb-4">Analisis Grafik per tahun</h1>
+          <h1 className="text-center mb-4">Analisis Grafik Penyewaan Venue</h1>
           <Line
             data={{
               labels:month,
               datasets: [
                 {
-                  label: "# of Votes",
+                  label: "Total Venue",
                   data: dataMonth,
                   backgroundColor: [
                     "rgba(255, 99, 132, 0.2)",

@@ -16,8 +16,8 @@ export const getVenueVerifiedAPI = (id) => {
   return API.get(`/vendor/${id}/venue/verified`);
 };
 
-export const editVenueAPI = (id) => {
-  return API.patch(`/venue/${id}`);
+export const editVenueAPI = (id, payload) => {
+  return API.patch(`/venue/${id}`, payload);
 };
 
 export const getDetailVenueAPI = (id) => {
