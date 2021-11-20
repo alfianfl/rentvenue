@@ -28,11 +28,16 @@ const navMenu = [
       href: "/tenant/transaksi",
       title: "Transaction",
     },
+    {
+      href: "/tenant/help",
+      title: "Help",
+    },
   ];
 export default function Dropdown({childern}) {
     const router = useRouter();
     const logoutHandler = () =>{
         Cookies.remove("jwt", { path: "" });
+        Cookies.remove("authTokenUser", { path: "" });
         router.push({
             pathname: "/"
         })

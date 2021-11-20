@@ -10,9 +10,8 @@ import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import MapGL from "react-map-gl";
 import Geocoder from "react-map-gl-geocoder";
 import swal from "sweetalert";
-
+import withUtils from "../../../utils/withUtilsVendor";
 import {useRouter} from "next/router";
-
 import { addVenueAPI } from "../../../services/VenueApi";
 
 const initialState = {

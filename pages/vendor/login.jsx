@@ -38,6 +38,11 @@ function login() {
     return cookie ? cookie : false;
   });
 
+  const [jwt, setJwt] = useState(() => {
+    const cookie = Cookies.get("authTokenVendor");
+    return cookie ? cookie : false;
+  });
+
   const router = useRouter();
 
   const submitHandler = (e) => {
@@ -50,7 +55,7 @@ function login() {
     };
 
     loginVendorAPI(payload)
-      .then((res) => {
+    .then((res) => {
         if (res.data.message === "Please activate your email first") {
           setAlert({ emailNotVerified: res.data.message });
         } else {
@@ -60,6 +65,7 @@ function login() {
             setAlert({ passwordDoesntMatch: res.data.message });
           } else {
             setToken(res.data.data.VendorId);
+            setJwt(res.data.data.token);
             router.push({
               pathname: "/vendor/venue",
             });
@@ -78,7 +84,12 @@ function login() {
     } else {
       Cookies.set("vendorId", token, { path: "" });
     }
-  }, [token]);
+    if (jwt === false) {
+      Cookies.remove("authTokenVendor", { path: "" });
+    } else {
+      Cookies.set("authTokenVendor", jwt, { path: "" });
+    }
+  }, [token, jwt]);
 
   return (
     <div className="login-rent">

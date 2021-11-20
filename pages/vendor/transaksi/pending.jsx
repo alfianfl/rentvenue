@@ -6,6 +6,7 @@ import { getPendingTransactionVendorAPI } from "../../../services/TransactionAPI
 import Cookies from "js-cookie";
 import BarButton from "../../../components/BarButton";
 import moment from "moment";
+import withUtils from "../../../utils/withUtilsVendor";
 function pending() {
   const [selectedRow, setSelectedRow] = useState({});
   const [transaksi, setTransaksi] = useState([]);

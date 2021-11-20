@@ -6,6 +6,7 @@ import { getSuccessTransactionVendorAPI } from "../../../services/TransactionAPI
 import Cookies from "js-cookie";
 import BarButton from "../../../components/BarButton";
 import moment from "moment";
+import withUtils from "../../../utils/withUtilsVendor";
 
 function success() {
   const [selectedRow, setSelectedRow] = useState({});

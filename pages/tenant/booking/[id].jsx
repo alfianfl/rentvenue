@@ -25,6 +25,7 @@ import { getDateVenue } from "../../../services/VenueApi";
 import moment from "moment";
 import swal from "sweetalert";
 import { useRouter } from "next/router";
+import withUtils from "../../../utils/withUtils";
 
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYWxmaWFuZmwiLCJhIjoiY2t0amQwb3oyMWFuZzJwcnRzZG90eWZkbCJ9.zn3csz72YfegBayAqOuWDA";

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { fetchUserVenue } from "../../../redux";
 import NumberFormat from 'react-number-format';
+import withUtils from "../../../utils/withUtils";
 
 const item = [{}, {}, {}, {}, {}, {}, {}, {}];
 

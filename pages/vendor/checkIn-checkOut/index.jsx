@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import VendorLayout from "../../../components/Layout/VendorLayout";
 import { checkInAPI, checkOutAPI } from "../../../services/CheckInOutAPI";
 import swal from "sweetalert";
+import withUtils from "../../../utils/withUtilsVendor";
 
 function index() {
     const [token, setToken] = useState("");

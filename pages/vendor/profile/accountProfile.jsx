@@ -5,6 +5,7 @@ import { getProfileAPI } from "../../../services/ProfileAPI";
 import Cookies from "js-cookie";
 import VendorLayout from "../../../components/Layout/VendorLayout";
 import { getProfileVendorAPI } from "../../../services/ProfileAPI";
+import withUtils from "../../../utils/withUtilsVendor";
 
 function accountProfile() {
   const vendorId = Cookies.get("vendorId");

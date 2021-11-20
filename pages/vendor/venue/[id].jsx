@@ -2,12 +2,9 @@ import React, { useEffect } from "react";
 import VendorLayout from "../../../components/Layout/VendorLayout";
 import Link from "next/link";
 import { TrashIcon, PencilAltIcon } from "@heroicons/react/solid";
-
-
+import withUtils from "../../../utils/withUtilsVendor";
 import { getDetailVenueAPI, deleteVenueAPI } from "../../../services/VenueApi";
-
 import { useRouter } from 'next/dist/client/router';
-
 import swal from "sweetalert";
 
 function detailVenue({ venue }) {

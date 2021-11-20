@@ -6,11 +6,11 @@ DocumentAddIcon
 import { VendorVenue } from "../../../components/Card";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-
 import {fetchVenue, fetchVenueVerified} from "../../../redux";
 import Cookies from "js-cookie";
+import withUtilsVendor from "../../../utils/withUtilsVendor";
 
-function index() {
+function venue() {
   const venueData = useSelector(state=>state.venue);
   const venueDataVerified = useSelector(state=>state.venueVerified);
   const dispatch = useDispatch();
@@ -62,5 +62,5 @@ function index() {
   );
 }
 
-index.Layout = VendorLayout;
-export default index;
+venue.Layout = VendorLayout;
+export default venue;

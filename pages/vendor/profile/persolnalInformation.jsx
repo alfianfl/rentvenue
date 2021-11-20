@@ -5,7 +5,7 @@ import { CameraIcon } from "@heroicons/react/solid";
 import { ProfileVendorAPI } from "../../../services/ProfileAPI";
 import Cookies from "js-cookie";
 import swal from "sweetalert";
-
+import withUtils from "../../../utils/withUtilsVendor";
 import VendorLayout from "../../../components/Layout/VendorLayout";
 import Link from "next/link";
 

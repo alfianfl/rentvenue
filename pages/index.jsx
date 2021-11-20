@@ -39,6 +39,12 @@ function login() {
     return cookie ? cookie : false;
   });
 
+  const [jwt, setJwt] = useState(() => {
+    const cookie = Cookies.get("authTokenVendor");
+    return cookie ? cookie : false;
+  });
+
+
   const router = useRouter();
 
   const submitHandler = (e) => {
@@ -63,6 +69,7 @@ function login() {
         }
         else{
           setToken(res.data.data.UserId);
+          setJwt(res.data.data.token);
           router.push({
             pathname: "/tenant",
           });
@@ -85,7 +92,12 @@ function login() {
     } else {
       Cookies.set("userId", token, { path: "" });
     }
-  }, [token]);
+    if (jwt === false) {
+      Cookies.remove("authTokenUser", { path: "" });
+    } else {
+      Cookies.set("authTokenUser", jwt, { path: "" });
+    }
+  }, [token, jwt]);
 
   return (
     <div className="login-rent">

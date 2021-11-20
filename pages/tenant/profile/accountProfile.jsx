@@ -3,6 +3,7 @@ import { Sidebar } from "../../../components/Sidebar";
 import Image from "next/image";
 import { getProfileAPI } from "../../../services/ProfileAPI";
 import Cookies from "js-cookie";
+import withUtils from "../../../utils/withUtils";
 
 function accountProfile() {
   const userId = Cookies.get("userId");

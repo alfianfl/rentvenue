@@ -5,6 +5,7 @@ import { CameraIcon } from "@heroicons/react/solid";
 import { ProfileAPI } from "../../../services/ProfileAPI";
 import Cookies from "js-cookie";
 import swal from "sweetalert";
+import withUtils from "../../../utils/withUtils";
 import { useRouter } from "next/router";
 
 

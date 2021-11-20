@@ -36,4 +36,13 @@ export const getWalletVendorAPI = (id) => {
   return API.get(`/vendor/${id}/wallet`);
 };
 
+export const getCodeForCheck = (id, idTransaksi) => {
+  return API.get(`/user/${id}/transaction/${idTransaksi}/code`);
+};
+
+export const getVendorAnalytic = (id) => {
+  return API.get(`/vendor/${id}/analytic`);
+};
+
+
 

@@ -7,13 +7,16 @@ import swal from "sweetalert";
 import Image from "next/image";
 import { Line, Pie } from "react-chartjs-2";
 import { getAnalyticAPI } from "../../../services/VenueApi";
-import { getWalletVendorAPI } from "../../../services/TransactionAPI";
+import { getWalletVendorAPI, getVendorAnalytic } from "../../../services/TransactionAPI";
 import Cookies from "js-cookie";
 import NumberFormat from "react-number-format";
+import moment from "moment";
+import withUtils from "../../../utils/withUtilsVendor";
 
 function index() {
   const vendorId = Cookies.get("vendorId");
   const [dataAnalitik, setDataAnalitik] = useState({});
+  const [dataPerMonth, setDataPerMonth] = useState([]);
   const [dataTransaction, setDataTransaction] = useState([]);
   const [wallet, setWallet] = useState();
   useEffect(() => {
@@ -21,7 +24,6 @@ function index() {
       .then((res) => {
         setDataAnalitik(res.data.data);
         setDataTransaction(res.data.data.transactionPerVenue);
-        console.log(res.data.data.transactionPerVenue);
       })
       .catch((err) => {
         console.log(err);
@@ -29,6 +31,14 @@ function index() {
     getWalletVendorAPI(vendorId)
       .then((res) => {
         setWallet(res.data.data.balance);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      getVendorAnalytic(vendorId)
+      .then((res) => {
+        console.log(res.data.data);
+        setDataPerMonth(res.data.data.transactionPerMonth)
       })
       .catch((err) => {
         console.log(err);
@@ -41,6 +51,17 @@ function index() {
 
   const label = dataTransaction.map((item) => {
     return item.Venue.name;
+  });
+
+  const dataMonth = dataPerMonth.map((item) => {
+    return item.count;
+  });
+
+  const month = dataPerMonth.map((item) => {
+    const monthP = moment(item.month);
+    monthP.format('L')
+
+    return monthP;
   });
 
   return (
@@ -124,24 +145,11 @@ function index() {
           <h1 className="text-center mb-4">Analisis Grafik per tahun</h1>
           <Line
             data={{
-              labels: [
-                "Januari",
-                "Februari",
-                "Maret",
-                "April",
-                "Mei",
-                "Juni",
-                "Juli",
-                "Agustus",
-                "September",
-                "Oktober",
-                "November",
-                "Desember",
-              ],
+              labels:month,
               datasets: [
                 {
                   label: "# of Votes",
-                  data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3],
+                  data: dataMonth,
                   backgroundColor: [
                     "rgba(255, 99, 132, 0.2)",
                     "rgba(54, 162, 235, 0.2)",

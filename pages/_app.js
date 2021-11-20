@@ -5,7 +5,7 @@ import Tenant from '../components/Layout/Tenant';
 
 import ProgressBar from "@badrap/bar-of-progress";
 import Router from 'next/router';
-
+import withUtils from '../utils/withUtils';
 import { Provider } from "react-redux";
 import store from "../redux/store";
 import { useState } from 'react';
@@ -42,7 +42,9 @@ function MyApp({ Component, pageProps }) {
         loading ? <Loading /> :
       <Provider store={store}>
         <Layout>
-          <Component {...pageProps} />
+          <withUtils>
+            <Component {...pageProps} />
+          </withUtils>
         </Layout>
       </Provider>
       }

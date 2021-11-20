@@ -3,11 +3,10 @@ import React, { useEffect, useState } from "react";
 
 import Banner from "../../components/Banner";
 import { LargeCard, MediumCard, SmallCard } from "../../components/Card";
-
+import withUtils from "../../utils/withUtils";
 import Link from "next/link";
 import gedung from "../../assets/index.jpg";
 import bgHome from "../../assets/bgHome.png";
-import withUtils from "../../utils/withUtils";
 import {
   getVenueByCityAPI,
   getVenueCityFilterAPI,
