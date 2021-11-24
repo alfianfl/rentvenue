@@ -23,8 +23,7 @@ function index() {
 
   console.log(venueData);
   return (
-    <Link href={`/tenant/booking/${venue.id}`}>
-      <div className="flex flex-wrap px-10 lg:px-20 pt-10 pb-20">
+    <div className="flex flex-wrap px-10 lg:px-20 pt-10 pb-20">
         <div className="w-1/8">
           <ul
             className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
@@ -60,7 +59,7 @@ function index() {
         <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
           {venueData.loading
             ? item.map((x) => (
-                <div className="bg-gray-100 w-full p-8 flex flex-wrap mt-5">
+              <div className="bg-gray-100 w-full p-8 flex flex-wrap mt-5">
                   <div className="w-full">
                     <a
                       href="/detail/72112620-skoda-octavia-combi-iii-combi-style-green-tec"
@@ -89,6 +88,7 @@ function index() {
                 </div>
               ))
             : venueData.venue.map((venue) => (
+              <Link href={`/tenant/booking/${venue.id}`}>
                 <div className="relative w-full h-[400px] lg:h-90 bg-white shadow-2xl rounded-3xl p-8 mx-2 my-3 cursor-pointer ">
                   <div className="overflow-x-hidden rounded-2xl relative">
                     <img
@@ -113,10 +113,10 @@ function index() {
                     </span>
                   </div>
                 </div>
+              </Link>
               ))}
         </div>
       </div>
-      </Link>
   );
 }
 
