@@ -19,7 +19,8 @@ function index() {
         <li>
           Setelah anda memilih gedung yang ingin di sewa, lakukan pemesanan
           dengan melakukan booking dengan cara memilih tanggal yang tersedia
-          lalu booking.
+          lalu booking. Booking TIDAK DAPAT DILAKUKAN ketika pembookingan pada saat hari-H 
+          dan Booking juga TIDAK DAPAT DILAKUKAN ketika durasi penyewaan gedung lebih dari 10 Hari
         </li>
         <li>
           Setelah itu anda akan diarahkan ke metode pembayaran. Pembayaran bisa
