@@ -98,14 +98,14 @@ function editVenue() {
             }
           )
         }
-        setImageFile([]);
-        setImage([]);
       })
       .catch(err => {
         setLoading(false);
         alert(err)
         console.log(err);
       });
+      setImageFile([]);
+      setImage([]);
   }
   return (
     <div className="detail-venue">
