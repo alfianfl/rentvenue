@@ -86,19 +86,20 @@ function editVenue() {
       .then(res=>{
         console.log(res);
         if(res.data.message === "Max photo reached (5)"){
-          setImageFile([]);
-          setImage([]);
           swal(res.data.message);
         }else{
           swal("Poof! Your venue has been updated!", {
             icon: "success",
           });
+          
           router.push(
             {
               pathname: '/vendor/venue'
             }
           )
         }
+        setImageFile([]);
+        setImage([]);
       })
       .catch(err => {
         setLoading(false);
