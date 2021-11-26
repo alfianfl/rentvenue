@@ -31,7 +31,7 @@ const navMenu = [
         nama: "Setting"
     },
     {
-        href: "",
+        href: "/vendor/login",
         nama: "Logout"
     },
 ]
