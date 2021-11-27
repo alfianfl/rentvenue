@@ -58,6 +58,11 @@ function persolnalInformation() {
       setImage({
         preview: URL.createObjectURL(e.target.files[0]),
       });
+
+      setProfileData({
+        ...profileData,
+        profile_picture: e.target.files[0]
+      })
     }
   };
 
