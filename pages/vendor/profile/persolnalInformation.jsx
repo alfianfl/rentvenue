@@ -58,8 +58,6 @@ function persolnalInformation() {
       setImage({
         preview: URL.createObjectURL(e.target.files[0]),
       });
-
-      dispatch({ type: "RAW", payload: e.target.files[0] });
     }
   };
 

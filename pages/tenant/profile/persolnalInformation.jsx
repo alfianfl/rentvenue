@@ -27,8 +27,6 @@ function persolnalInformation() {
       setImage({
         preview: URL.createObjectURL(e.target.files[0]),
       });
-
-      dispatch({ type: "RAW", payload: e.target.files[0] });
     }
   };
 
@@ -54,6 +52,8 @@ function persolnalInformation() {
     Object.keys(profileData).map((key) => {
       profileData[key] === "" ? null : data.append(key, profileData[key]);
     });
+
+    console.log(data);
 
     ProfileAPI(userId, data)
       .then((res) => {
