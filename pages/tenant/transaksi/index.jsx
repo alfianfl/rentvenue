@@ -112,7 +112,7 @@ function transaksi() {
         transaksi.map((t) => (
           <div className="relative grid grid-cols-1 lg:grid-cols-5 gap-4 max-w-sm min-w-[100%] lg:min-w-[700px] bg-white shadow-2xl rounded-3xl p-8 mx-1 mb-10 cursor-pointer ">
             <div className="overflow-x-hidden col-span-2 rounded-2xl relative">
-              <img className={t.Venue.Venue_Photos[0].url} />
+              <img                 className="rounded-2xl w-full h-40 object-cover" src={t.Venue.Venue_Photos[0].url} />
             </div>
             <div className="mt-4 pl-2 mb-2 col-span-3 flex justify-between ">
               <div>

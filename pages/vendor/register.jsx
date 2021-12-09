@@ -258,11 +258,6 @@ function register() {
                   dispatch({ type: "PASSWORD", payload: e.target.value })
                 }
               />
-
-              {/* if no choose password */}
-              {/* <p className="text-red-500 text-xs italic">
-                Please choose a password.
-              </p> */}
             </div>
             <div className="mb-6">
               <label
@@ -280,11 +275,6 @@ function register() {
                   dispatch({ type: "CONFIRM_PASSWORD", payload: e.target.value })
                 }
               />
-
-              {/* if no choose password */}
-              {/* <p className="text-red-500 text-xs italic">
-                Please choose a password.
-              </p> */}
             </div>
             <div className="flex items-center justify-between">
               <button

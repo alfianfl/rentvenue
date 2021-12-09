@@ -39,19 +39,6 @@ function booking({ venue, feedback }) {
   const [loading, setLoading] = useState(false);
   const [dateTaken, setDateTaken] = useState([]);
 
-  console.log(venue);
-
-  // console.log(
-  //   dateTaken.map((date) => {
-  //     return new Date(
-  //       (typeof date === "string" ? new Date(date) : date).toLocaleString(
-  //         "en-US",
-  //         { timeZone: "Asia/Jakarta" }
-  //       )
-  //     );
-  //   })
-  // );
-
   const router = useRouter();
   const { id } = router.query;
   useEffect(() => {
@@ -324,9 +311,7 @@ function booking({ venue, feedback }) {
                     <div className="relative h-14 w-14">
                       <Image
                         src={
-                          feedback.Transaction.User.profile_picture
-                            ? feedback.Transaction.User.profile_picture
-                            : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                           "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                         }
                         layout="fill"
                         className="rounded-lg"
@@ -355,10 +340,6 @@ function booking({ venue, feedback }) {
         </div>
       </div>
       <ModalBooking path={bookToken} isOpen={modalBook} />
-      {/* <FloatingWhatsApp
-        phoneNumber={"089524013023"}
-        zIndex="zIndex"
-      /> */}
     </div>
   );
 }

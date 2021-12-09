@@ -1,33 +1,61 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { getVenueCityAPI } from "../../../services/VenueApi";
+import {
+  getAscVenue,
+  getDescVenue,
+  getVenueCityAPI,
+} from "../../../services/VenueApi";
 import NumberFormat from "react-number-format";
 
 const item = [{}, {}, {}, {}, {}, {}, {}, {}];
 
 const initialFilter = ["Semua kategori", "Termahal", "Termurah"];
-function detailCity() {
+function filterProduct() {
   const [openTab, setOpenTab] = React.useState(1);
   const [venueData, setVenueData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
-  const { city } = router.query;
+  const { filter } = router.query;
 
   useEffect(() => {
     setLoading(true);
-    getVenueCityAPI(city)
-      .then((res) => {
-        console.log(res.data.data);
-        setVenueData(res.data.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
+    if (filter === "Termurah") {
+      getAscVenue()
+        .then((res) => {
+          console.log(res.data.data);
+          setVenueData(res.data.data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    } else if (filter === "Termahal") {
+      getDescVenue()
+        .then((res) => {
+          console.log(res.data.data);
+          setVenueData(res.data.data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    } else {
+      getVenueCityAPI(filter)
+        .then((res) => {
+          console.log(res.data.data);
+          setVenueData(res.data.data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    }
   }, []);
 
   return (
@@ -38,28 +66,27 @@ function detailCity() {
           role="tablist"
         >
           {initialFilter.map((filter) => (
-            <li
-              key={filter}
-              className="mb-2 mr-2 last:mr-0 flex-auto text-center "
-            >
-              <a
-                className={
-                  "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block hover:bg-blue-800 cursor-pointer leading-normal " +
-                  (openTab === 1
-                    ? "text-white bg-blue-600"
-                    : "text-white bg-white")
-                }
-                onClick={(e) => {
-                  e.preventDefault();
-                  setOpenTab(1);
-                }}
-                data-toggle="tab"
-                href="#link1"
-                role="tablist"
+            <Link href={` ${filter === "Semua kategori" ? `/tenant/listVenue` : `/tenant/listVenue/${filter}`} `}>
+              <li
+                key={filter}
+                className="mb-2 mr-2 last:mr-0 flex-auto text-center "
               >
-                <i className="fas fa-space-shuttle text-base mr-1"></i> {filter}
-              </a>
-            </li>
+                <a
+                  className={
+                    "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block hover:bg-blue-800 cursor-pointer leading-normal " +
+                    (openTab === 1
+                      ? "text-white bg-blue-600"
+                      : "text-white bg-white")
+                  }
+                  data-toggle="tab"
+                  href="#link1"
+                  role="tablist"
+                >
+                  <i className="fas fa-space-shuttle text-base mr-1"></i>{" "}
+                  {filter}
+                </a>
+              </li>
+            </Link>
           ))}
         </ul>
       </div>
@@ -134,4 +161,4 @@ function detailCity() {
   );
 }
 
-export default detailCity;
+export default filterProduct;

@@ -59,7 +59,10 @@ function persolnalInformation() {
         preview: URL.createObjectURL(e.target.files[0]),
       });
 
-      dispatch({ type: "RAW", payload: e.target.files[0] });
+      setProfileData({
+        ...profileData,
+        profile_picture: e.target.files[0]
+      })
     }
   };
 
