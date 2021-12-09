@@ -60,6 +60,14 @@ export const getDescVenue = (id) => {
   return API.get(`/venue/price/desc`);
 };
 
+export const getAscVenueCity = (city) => {
+  return API.get(`/venue/${city}/price/asc`);
+};
+
+export const getDescVenueCity = (city) => {
+  return API.get(`/venue/${city}/price/desc`);
+};
+
 export const getAdminVenue = () => {
   return API.get(`/admin/venue`);
 };

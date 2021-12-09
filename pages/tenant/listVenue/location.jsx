@@ -2,30 +2,29 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import {
-  getAscVenue,
-  getDescVenue,
+  getAscVenueCity,
+  getDescVenueCity,
   getVenueCityAPI,
 } from "../../../services/VenueApi";
 import NumberFormat from "react-number-format";
 
 const item = [{}, {}, {}, {}, {}, {}, {}, {}];
 
-const initialFilter = ["Semua kategori", "Termahal", "Termurah"];
-function filterProduct() {
+const initialFilter = ["Termahal", "Termurah"];
+function location() {
   const [openTab, setOpenTab] = React.useState(1);
   const [venueData, setVenueData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState("");
 
   const router = useRouter();
 
-  const { filter } = router.query;
+  const {city} = router.query;
 
-  console.log(router);
-
-  useEffect(() => {
+  const filterPrice = () => {
     setLoading(true);
     if (filter === "Termurah") {
-      getAscVenue()
+      getAscVenueCity(city)
         .then((res) => {
           console.log(res.data.data);
           setVenueData(res.data.data);
@@ -36,7 +35,7 @@ function filterProduct() {
           setLoading(false);
         });
     } else if (filter === "Termahal") {
-      getDescVenue()
+      getDescVenueCity(city)
         .then((res) => {
           console.log(res.data.data);
           setVenueData(res.data.data);
@@ -46,8 +45,35 @@ function filterProduct() {
           console.log(err);
           setLoading(false);
         });
-    } else {
-      getVenueCityAPI(filter)
+    } 
+  }
+
+  useEffect(() => {
+    setLoading(true);
+    if (filter === "Termurah") {
+      getAscVenueCity(city)
+        .then((res) => {
+          console.log(res.data.data);
+          setVenueData(res.data.data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    } else if (filter === "Termahal") {
+      getDescVenueCity(city)
+        .then((res) => {
+          console.log(res.data.data);
+          setVenueData(res.data.data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    } else{
+      getVenueCityAPI(city)
         .then((res) => {
           console.log(res.data.data);
           setVenueData(res.data.data);
@@ -58,7 +84,8 @@ function filterProduct() {
           setLoading(false);
         });
     }
-  }, []);
+  
+  }, [filter]);
 
   return (
     <div className="flex flex-wrap px-10 lg:px-20 pt-10 pb-20">
@@ -68,10 +95,13 @@ function filterProduct() {
           role="tablist"
         >
           {initialFilter.map((filter) => (
-            <Link href={` ${filter === "Semua kategori" ? `/tenant/listVenue` : `/tenant/listVenue/${filter}`} `}>
               <li
                 key={filter}
                 className="mb-2 mr-2 last:mr-0 flex-auto text-center "
+                onClick={()=>{
+                  setFilter(filter)
+                  filterPrice()
+                }}
               >
                 <a
                   className={
@@ -81,14 +111,12 @@ function filterProduct() {
                       : "text-white bg-white")
                   }
                   data-toggle="tab"
-                  href="#link1"
                   role="tablist"
                 >
                   <i className="fas fa-space-shuttle text-base mr-1"></i>{" "}
                   {filter}
                 </a>
               </li>
-            </Link>
           ))}
         </ul>
       </div>
@@ -163,4 +191,4 @@ function filterProduct() {
   );
 }
 
-export default filterProduct;
+export default location;

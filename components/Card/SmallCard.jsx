@@ -7,7 +7,10 @@ function SmallCard({img, location, venue}) {
 
     const changeRoute = (city) =>{
         router.push({
-            pathname:`/tenant/listVenue/${city}`
+            pathname:`/tenant/listVenue/location`,
+            query:{
+                city
+            }
         })
     }
 
