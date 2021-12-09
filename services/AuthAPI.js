@@ -15,3 +15,7 @@ export const registerVendorAPI = (payload) => {
 export const loginVendorAPI = (payload) => {
   return API.post("/vendor/login", payload);
 };
+
+export const loginAdminAPI = (payload) => {
+  return API.post("/admin/login", payload);
+};

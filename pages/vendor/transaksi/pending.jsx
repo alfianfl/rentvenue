@@ -39,8 +39,9 @@ function pending() {
   }, []);
 
   return (
-    <div className="w-[500px] lg:w-[1300px] overflow-auto">
+    <>
     <BarButton />
+    <div className="w-[500px] lg:w-[1500px] overflow-auto">
     <div className="w-full  mb-12 xl:mb-0 px-4 mx-auto mt-5">
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded ">
         <div className="block w-full overflow-x-auto">
@@ -61,6 +62,9 @@ function pending() {
                 </th>
                 <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                   End Book
+                </th>
+                <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                  Total Payment
                 </th>
                 <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                   Status Penyewaan
@@ -87,6 +91,9 @@ function pending() {
                     <i className="fas fa-arrow-up text-emerald-500 mr-4" />
                     {moment(item.finish_book).format("MMMM Do YYYY")}
                   </td>
+                  <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                    {item.total_payment}
+                  </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <i className="fas fa-arrow-up text-emerald-500 mr-4" />
                     {item.payment_status}
@@ -99,6 +106,7 @@ function pending() {
       </div>
     </div>
   </div>
+  </>
   );
 }
 pending.Layout = VendorLayout;

@@ -6,10 +6,8 @@ import Link from 'next/link';
 
 export default function ModalShowCheckin({isOpen}) {
   const [open, setOpen] = useState(isOpen);
-
   const cancelButtonRef = useRef(null);
 
- 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" initialFocus={cancelButtonRef} onClose={setOpen}>

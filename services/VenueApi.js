@@ -60,5 +60,25 @@ export const getDescVenue = (id) => {
   return API.get(`/venue/price/desc`);
 };
 
+export const getAdminVenue = () => {
+  return API.get(`/admin/venue`);
+};
+
+export const submitVenueVerification = (id, payload) => {
+  return API.post(`/admin/venue/${id}/verification`, payload);
+};
+
+export const getVenueDocument = (id) => {
+  return API.get(`/admin/venue/${id}/document`);
+};
+
+export const getAdminDataUser = () => {
+  return API.get(`/admin/user`);
+};
+
+export const getAdminDataVendor = () => {
+  return API.get(`/admin/vendor`);
+};
+
 
 

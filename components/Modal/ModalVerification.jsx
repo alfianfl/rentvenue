@@ -6,12 +6,9 @@ import Link from 'next/link';
 
 export default function ModalVerifdication({isOpen, path}) {
   const [open, setOpen] = useState(isOpen);
-
   const cancelButtonRef = useRef(null);
-
   const router = useRouter();
 
- 
   useEffect(()=>{
     setOpen(isOpen);
   },[isOpen])
