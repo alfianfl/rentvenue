@@ -52,5 +52,13 @@ export const getDateVenue = (id) => {
   return API.get(`/venue/${id}/date`);
 };
 
+export const getAscVenue = () => {
+  return API.get(`/venue/price/asc`);
+};
+
+export const getDescVenue = (id) => {
+  return API.get(`/venue/price/desc`);
+};
+
 
 

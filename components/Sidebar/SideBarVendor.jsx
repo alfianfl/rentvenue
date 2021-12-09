@@ -8,12 +8,12 @@ import swal from "sweetalert";
 function SideBarVendor({ navMenu, children }) {
   const router = useRouter();
 
-  const logoutHandler = () =>{
+  const logoutHandler = () => {
     Cookies.remove("jwt", { path: "" });
     router.push({
-      pathname : "/vendor/login"
-    })
-  }
+      pathname: "/vendor/login",
+    });
+  };
   return (
     <div className="relative min-h-screen md:flex ">
       {/* mobile menu bar */}
@@ -41,7 +41,10 @@ function SideBarVendor({ navMenu, children }) {
         </button>
       </div>
       {/* sidebar */}
-      <div className="sidebar text-blue-100 w-80 space-y-6 py-7 px-5 sticky inset-y-0 left-0 transform -translate-x-full md:sticky md:translate-x-0 transition duration-200 ease-in-out" style={{backgroundColor:"#363740"}}>
+      <div
+        className="sidebar text-blue-100 w-80 space-y-6 py-7 px-5 sticky inset-y-0 left-0 transform -translate-x-full md:sticky md:translate-x-0 transition duration-200 ease-in-out"
+        style={{ backgroundColor: "#363740" }}
+      >
         {/* logo */}
         <a href="#" className="text-white flex items-center space-x-2 px-4">
           <svg
@@ -58,7 +61,9 @@ function SideBarVendor({ navMenu, children }) {
               d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
             />
           </svg>
-          <span className="text-2xl font-extrabold text center my-8">RENTVENUE</span>
+          <span className="text-2xl font-extrabold text center my-8">
+            RENTVENUE
+          </span>
         </a>
         {/* nav */}
         <nav>
@@ -69,7 +74,10 @@ function SideBarVendor({ navMenu, children }) {
                 className="block nav-vendor py-2.5 px-4 my-3 rounded transition duration-200 font-bold hover:text-white"
                 onClick={menu.nama === "Logout" && logoutHandler}
               >
-              <span>{menu.nama}</span>
+                <span className="flex">
+                  {" "}
+                  <i className="mr-3">{menu.icon}</i> {menu.nama}
+                </span>
               </a>
             </Link>
           ))}
