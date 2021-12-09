@@ -14,7 +14,6 @@ import MapGL from "react-map-gl";
 import Geocoder from "react-map-gl-geocoder";
 
 import { StarIcon } from "@heroicons/react/solid";
-import FloatingWhatsApp from 'react-floating-whatsapp'
 import { getDetailVenueAPI } from "../../../services/VenueApi";
 import { getFeedbackAPI } from "../../../services/FeedbackAPI";
 import { bookingAPI } from "../../../services/TransactionAPI";
@@ -25,7 +24,7 @@ import { getDateVenue } from "../../../services/VenueApi";
 import moment from "moment";
 import swal from "sweetalert";
 import { useRouter } from "next/router";
-import withUtils from "../../../utils/withUtils";
+
 
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYWxmaWFuZmwiLCJhIjoiY2t0amQwb3oyMWFuZzJwcnRzZG90eWZkbCJ9.zn3csz72YfegBayAqOuWDA";

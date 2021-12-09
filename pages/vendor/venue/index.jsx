@@ -17,6 +17,8 @@ function venue() {
 
   const vendorId = Cookies.get("vendorId");
 
+  console.log(venueData);
+
   useEffect(() => {
     dispatch(fetchVenue(vendorId));
     dispatch(fetchVenueVerified(vendorId));
@@ -41,8 +43,8 @@ function venue() {
       </div>
       <div className="relative m-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
         {
-          venueDataVerified.venue.map(venue=>(
-            <VendorVenue data={venue} />
+          venueDataVerified.venue.map((venue, index)=>(
+            <VendorVenue key={index} data={venue} />
           ))
         }
       </div>
@@ -51,8 +53,8 @@ function venue() {
       </div>
       <div className="relative m-3 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
         {
-          venueData.venue.map(venue=>(
-            <VendorVenue data={venue} />
+          venueData.venue.map((venue, index)=>(
+            <VendorVenue key={index} data={venue} />
           ))
         }
       </div>

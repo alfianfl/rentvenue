@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { TableTransaksi } from "../../../components/Table";
 import VendorLayout from "../../../components/Layout/VendorLayout";
-import MOCK_DATA_PRODUK from "../../../components/Table/MOCK_DATA_PRODUK.json";
 import { getSuccessTransactionVendorAPI } from "../../../services/TransactionAPI";
 import Cookies from "js-cookie";
 import BarButton from "../../../components/BarButton";
 import moment from "moment";
-import withUtils from "../../../utils/withUtilsVendor";
+import NumberFormat from "react-number-format";
 
 function success() {
   const [selectedRow, setSelectedRow] = useState({});
@@ -118,7 +116,12 @@ function success() {
                     )}
                   </td>
                   <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                    {item.total_payment}
+                  <NumberFormat
+                  value={item.total_payment}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" IDR "}
+                />
                   </td>
                   <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <i className="fas fa-arrow-up text-emerald-500 mr-4" />

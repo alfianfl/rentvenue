@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import NumberFormat from 'react-number-format';
+import NumberFormat from "react-number-format";
 
-function VenueVendorCard({data}) {
+function VenueVendorCard({ data }) {
   console.log(data);
   return (
     <div className="relative max-w-sm min-w-[350px] bg-white shadow-2xl rounded-3xl p-8 mx-1 my-3 cursor-pointer ">
@@ -18,8 +18,31 @@ function VenueVendorCard({data}) {
             {data.name}
           </p>
           <p className="text-xs text-gray-800 mt-0">{data.address}</p>
-          <p className="text-sm text-red-500"><NumberFormat value={data.price} displayType={'text'} thousandSeparator={true} prefix={' IDR '} /></p>
+          <p className="text-sm text-red-500">
+            <NumberFormat
+              value={data.price}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" IDR "}
+            />
+          </p>
         </div>
+        {data.status === "rejected" || data.status === "pending" ? (
+          <div>
+            <div
+              style={{
+                textAlign: "center",
+                width: "max-content",
+                fontSize: "16px",
+              }}
+              className={` ${data.status === "pending" ? "bg-yellow-500 border-yellow-500" : "bg-red-500 border-red-500"}align-center text-white font-semibold my-5 cursor-pointer px-3 border  rounded-2xl`}
+            >
+              {data.status}
+            </div>
+          </div>
+        ) : (
+          <span></span>
+        )}
       </div>
       <div className="flex justify-center">
         <span className="text-sm text-blue-600 text-center">
