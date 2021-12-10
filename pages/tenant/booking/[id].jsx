@@ -310,6 +310,7 @@ function booking({ venue, feedback }) {
                     <div className="relative h-14 w-14">
                       <Image
                         src={
+                          feedback.Transaction.User.url? feedback.Transaction.User.url:
                            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                         }
                         layout="fill"
