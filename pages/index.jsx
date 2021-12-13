@@ -66,7 +66,7 @@ function login() {
           setAlert({passwordDoesntMatch:res.data.message})
         }else if(res.data.message === "Email is not registered"){
           setAlert({emailNotVerified: res.data.message});
-        }
+        } 
         else{
           setToken(res.data.data.UserId);
           setJwt(res.data.data.token);
@@ -80,6 +80,9 @@ function login() {
     })
       .catch((err) => {
         console.log(err);
+        if(err === "Validation error: Validation isEmail on email failed"){
+          setAlert({emailNotVerified: err});
+        }
         setDisabled(false);
         setLoading(false)
         swal("Data tidak ada")

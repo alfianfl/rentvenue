@@ -74,7 +74,7 @@ function Home({ exploreData, cardData }) {
 
       <Banner image={bgHome}></Banner>
 
-      <main className="max-w-7xl mx-auto px-8 sm:px-1">
+      <main className=" mx-auto sm:px-1" style={{width:"100vw", padding:"5rem"}}>
         <section className="pt-6 mt-20">
           <h2 className="text-4xl font-semibold pb-5">Explore Nearby</h2>
 
@@ -189,9 +189,9 @@ function Home({ exploreData, cardData }) {
           </div>
         </section>
         <section>
-          <h2 className="text-4xl font-semibold py-8">Live Anywhere</h2>
+          <h2 className="text-4xl font-semibold py-8 text-center">Live Anywhere</h2>
 
-          <div className="flex space-x-3 overflow-scroll scrollbar-hide">
+          <div className="flex space-x-3 overflow-scroll justify-center scrollbar-hide">
             {cardData.map((item, index) => (
               <MediumCard key={index} img={item.img} title={item.title} />
             ))}
@@ -228,4 +228,4 @@ export async function getStaticProps() {
   };
 }
 
-export default withUtils(Home);
+export default Home;
