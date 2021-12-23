@@ -74,8 +74,8 @@ function Home({ exploreData, cardData }) {
 
       <Banner image={bgHome}></Banner>
 
-      <main className=" mx-auto sm:px-1" style={{width:"100vw", padding:"5rem"}}>
-        <section className="pt-6 mt-20">
+      <main className=" mx-auto sm:px-1" style={{width:"100vw", padding:"3rem"}}>
+        <section className="pt-6">
           <h2 className="text-4xl font-semibold pb-5">Jelajahi Kota di Indonesia</h2>
 
           {/* Pull some data from server */}
