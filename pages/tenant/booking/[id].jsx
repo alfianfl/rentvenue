@@ -107,26 +107,53 @@ function booking({ venue, feedback }) {
       start_book: startBook.format("YYYY-MM-DDThh:mm:ssZ"),
       finish_book: endBook.format("YYYY-MM-DDThh:mm:ssZ"),
     };
-    bookingAPI(payload)
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.redirect_url) {
-          setModalBook(true);
-          setBookToken(res.data.redirect_url);
-        } else if (
-          res.data.message === "Can't book days in the past and Today"
-        ) {
-          swal(res.data.message);
-        } else if (res.data.message === "Date is taken") {
-          swal(res.data.message);
-        } else if (res.data.message === "Maximum booking limit is 10 days") {
-          swal(res.data.message);
+
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this imaginary file!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          deleteVenueAPI(id)
+            .then(res => {
+              swal("Poof! Your venue has been deleted!", {
+                icon: "success",
+              });
+              bookingAPI(payload)
+              .then((res) => {
+                console.log(res.data);
+                if (res.data.redirect_url) {
+                  setBookToken(res.data.redirect_url);
+                } else if (
+                  res.data.message === "Can't book days in the past and Today"
+                ) {
+                  swal(res.data.message);
+                } else if (res.data.message === "Date is taken") {
+                  swal(res.data.message);
+                } else if (res.data.message === "Maximum booking limit is 10 days") {
+                  swal(res.data.message);
+                }
+                setLoading(false);
+              })
+              .catch((err) => {
+                setLoading(false);
+                console.log(err);
+              });
+              router.push(
+                {
+                  pathname: '/tenant/transaksi'
+                }
+              )
+            })
+            .catch(err => {
+              console.log(err);
+            })
+        } else {
+          swal("Your venue is safe!");
         }
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err);
       });
   };
 

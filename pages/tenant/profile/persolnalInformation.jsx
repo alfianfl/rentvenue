@@ -122,7 +122,7 @@ function persolnalInformation() {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-first-name"
                 >
-                  First Name*
+                  First Name
                 </label>
                 <input
                   className="shadow appearance-none border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -146,7 +146,7 @@ function persolnalInformation() {
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="grid-last-name"
                 >
-                  Last Name*
+                  Last Name
                 </label>
                 <input
                   className="shadow appearance-none border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -168,7 +168,7 @@ function persolnalInformation() {
                 className="block text-gray-700 text-sm font-light mb-2"
                 htmlFor="username"
               >
-                Gender*
+                Gender
               </label>
               <div className="custom_radio flex justify-between">
                 <div>
@@ -207,7 +207,7 @@ function persolnalInformation() {
                 className="block text-gray-700 text-sm font-light mb-2"
                 htmlFor="username"
               >
-                Phone Number*
+                Phone Number
               </label>
               <input
                 className="shadow appearance-none border-gray-700 rounded-2xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

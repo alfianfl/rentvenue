@@ -76,7 +76,7 @@ function Home({ exploreData, cardData }) {
 
       <main className=" mx-auto sm:px-1" style={{width:"100vw", padding:"5rem"}}>
         <section className="pt-6 mt-20">
-          <h2 className="text-4xl font-semibold pb-5">Explore Nearby</h2>
+          <h2 className="text-4xl font-semibold pb-5">Jelajahi Kota di Indonesia</h2>
 
           {/* Pull some data from server */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -91,7 +91,7 @@ function Home({ exploreData, cardData }) {
           </div>
         </section>
         <section className=" pt-10 pb-20 mt-20">
-          <h2 className="text-4xl font-semibold pb-5">Rekomendasi Lainnya</h2>
+          <h2 className="text-4xl font-semibold pb-5">Kota Besar yang Sering Dikunjungi</h2>
           <div className="w-1/8 flex flex-wrap justify-center">
             <ul
               className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
