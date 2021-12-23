@@ -110,51 +110,47 @@ function booking({ venue, feedback }) {
 
     swal({
       title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this imaginary file!",
-      icon: "warning",
+      text: "you want booking this venue!",
+      icon: "success",
       buttons: true,
       dangerMode: true,
     })
       .then((willDelete) => {
         if (willDelete) {
-          deleteVenueAPI(id)
+          bookingAPI(payload)
             .then(res => {
-              swal("Poof! Your venue has been deleted!", {
+              swal("Poof! Your venue has been booked!", {
                 icon: "success",
               });
-              bookingAPI(payload)
-              .then((res) => {
-                console.log(res.data);
-                if (res.data.redirect_url) {
-                  setBookToken(res.data.redirect_url);
-                } else if (
-                  res.data.message === "Can't book days in the past and Today"
-                ) {
-                  swal(res.data.message);
-                } else if (res.data.message === "Date is taken") {
-                  swal(res.data.message);
-                } else if (res.data.message === "Maximum booking limit is 10 days") {
-                  swal(res.data.message);
-                }
-                setLoading(false);
-              })
-              .catch((err) => {
-                setLoading(false);
-                console.log(err);
-              });
-              router.push(
-                {
-                  pathname: '/tenant/transaksi'
-                }
-              )
+              console.log(res.data);
+              if (res.data.redirect_url) {
+                setBookToken(res.data.redirect_url);
+                router.push(
+                  {
+                    pathname: '/tenant/transaksi'
+                  }
+                )
+              } else if (
+                res.data.message === "Can't book days in the past and Today"
+              ) {
+                swal(res.data.message);
+              } else if (res.data.message === "Date is taken") {
+                swal(res.data.message);
+              } else if (res.data.message === "Maximum booking limit is 10 days") {
+                swal(res.data.message);
+              }
+              setLoading(false);
             })
             .catch(err => {
+              setLoading(false);
               console.log(err);
             })
         } else {
-          swal("Your venue is safe!");
+          swal("Action Canceled!");
+          setLoading(false);
         }
       });
+
   };
 
   const getStar = (length) => {
